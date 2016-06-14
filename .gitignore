@@ -1,0 +1,13 @@
+*.pyc
+*.log
+*.pid
+Vagrantfile
+*.DS_Store
+.idea
+.vagrant
+tweetaggregator/static/*
+tweetaggregator/components/*
+tweetaggregator/uploaded/*
+tweetaggregator/tweetaggregator/settings/local_settings.py
+tweetaggregator/tweetaggregator/settings/production.py
+node-v*
