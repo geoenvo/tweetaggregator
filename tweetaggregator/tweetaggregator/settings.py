@@ -119,7 +119,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 DATETIME_FORMAT = 'iso-8601'
 
@@ -128,6 +128,12 @@ DATETIME_FORMAT = 'iso-8601'
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'djangobower.finders.BowerFinder',
+)
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -140,4 +146,4 @@ CONSUMER_KEY = 'sYinutLQ8yFG3rCFTZGhusyMY'
 CONSUMER_SECRET = 'kdE8yPL7vTB7vzIXQmFKtXm6QD3ejoP6Rdgx5fvnEacxi3G2An'
 ACCESS_TOKEN = '714659320047095808-bIjgsI07CoY07jnKab8Dw3r1YUyKcGL'
 ACCESS_SECRET = 'dH8mSgf0avbGIpg1skFTnGHGiU4kh7RRxFp0jdzw0a7wM'
-MAX_TWEETS = 100
+MAX_TWEETS = 5

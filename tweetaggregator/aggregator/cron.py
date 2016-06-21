@@ -8,6 +8,7 @@ import tweepy
 from tweepy import OAuthHandler
 
 from .models import Source, Twitter
+import got
 
 
 def tweet_scheduled_job():
@@ -25,33 +26,99 @@ def tweet_scheduled_job():
     sources = Source.objects.filter(status='ACTIVE', type='TWITTER')
 
     for active_source in sources:
-        keywords = active_source.keywords.all()
-        for a_keyword in keywords:
-            query = a_keyword.keyword
-            searched_tweets = [status for status in tweepy.Cursor(api.search, q=query).items(max_tweets)]
-            for status in searched_tweets:
-                tweet_localcreatedtime = status.created_at + timedelta(hours=7)
-                diff = datetime.now() - tweet_localcreatedtime
-                diff_hours = diff.total_seconds() / 3600
-                if diff_hours <= 1:
-                    tweet_text = status.text.translate(non_bmp_map)
-                    tweet_text = "[{}] {}".format(active_source.disaster, smart_str(tweet_text))
-                    tweet_id = status.id_str
-                    tweet_created = status.created_at
-                    user_id = status.user.id
-                    user_name = status.user.name
-                    user_screen_name = status.user.screen_name
-                    user_utc_offset = status.user.utc_offset
-                    user_coordinate = status.coordinate
-                    new_twitter = Twitter(
-                        tweet_text=tweet_text,
-                        keyword=a_keyword,
-                        tweet_id=tweet_id,
-                        tweet_created=tweet_created,
-                        user_id=user_id,
-                        user_name=user_name,
-                        user_screen_name=user_screen_name,
-                        user_utc_offset=user_utc_offset,
-                        user_coordinate=user_coordinate
-                    )
-                    new_twitter.save()
+        if active_source.method == "TWEEPY":
+            keywords = active_source.keywords.all()
+            for a_keyword in keywords:
+                query = a_keyword.keyword
+                searched_tweets = [status for status in tweepy.Cursor(api.search, q=query).items(max_tweets)]
+                for status in searched_tweets:
+                    tweet_localcreatedtime = status.created_at + timedelta(hours=7)
+                    diff = datetime.now() - tweet_localcreatedtime
+                    diff_hours = diff.total_seconds() / 3600
+                    if diff_hours <= 1:
+                        tweet_text = status.text.translate(non_bmp_map)
+                        tweet_text = "{}".format(smart_str(tweet_text))
+                        tweet_id = status.id_str
+                        tweet_created = status.created_at
+                        user_id = status.user.id
+                        user_name = status.user.name
+                        user_screen_name = status.user.screen_name
+                        user_utc_offset = status.user.utc_offset
+                        user_coordinates = ''
+                        ##if status.coordinates:
+                        ##user_coordinates = user_coordinates
+                        new_twitter = Twitter(
+                            tweet_text=tweet_text,
+                            keyword=a_keyword,
+                            tweet_id=tweet_id,
+                            tweet_created=tweet_created,
+                            user_id=user_id,
+                            user_name=user_name,
+                            user_screen_name=user_screen_name,
+                            user_utc_offset=user_utc_offset,
+                            user_coordinate=user_coordinates
+                        )
+                        new_twitter.save()
+        if active_source.method == "GOT":
+            if (active_source.username == '' and active_source.since == None and active_source.until == None):
+                keywords = active_source.keywords.all()
+                for a_keyword in keywords:
+                    query = a_keyword.keyword
+                    tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setMaxTweets(max_tweets)
+                    searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
+                    for status in searched_tweets:
+                        tweet_createdtime = status.date
+                        diff = datetime.now() - tweet_createdtime
+                        diff_hours = diff.total_seconds() / 3600
+                        if diff_hours <= 1:
+                            tweet_text = status.text
+                            tweet_text = "{}".format(smart_str(tweet_text))
+                            tweet_id = status.id
+                            tweet_created = status.date
+                            #user_id = status.user.id
+                            user_name = ''
+                            user_screen_name = status.username
+                            #user_utc_offset = ''
+                            user_coordinates = ''
+                            new_twitter = Twitter(
+                                tweet_text=tweet_text,
+                                keyword=a_keyword,
+                                tweet_id=tweet_id,
+                                tweet_created=tweet_created,
+                                #user_id=user_id,
+                                user_name=user_name,
+                                user_screen_name=user_screen_name,
+                                #user_utc_offset=user_utc_offset,
+                                user_coordinate=user_coordinates
+                            )
+                            new_twitter.save()
+
+            if (active_source.username != '' and active_source.since == None and active_source.until == None):
+                username = active_source.username
+                keywords = active_source.keywords.all()
+                for a_keyword in keywords:
+                    query = a_keyword.keyword
+                    tweetCriteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setMaxTweets(max_tweets)
+                    searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
+                    for status in searched_tweets:
+                        tweet_text = status.text
+                        tweet_text = "{}".format(smart_str(tweet_text))
+                        tweet_id = status.id
+                        tweet_created = status.date
+                        #user_id = status.user.id
+                        user_name = ''
+                        user_screen_name = status.username
+                        #user_utc_offset = ''
+                        user_coordinates = ''
+                        new_twitter = Twitter(
+                            tweet_text=tweet_text,
+                            keyword=a_keyword,
+                            tweet_id=tweet_id,
+                            tweet_created=tweet_created,
+                            #user_id=user_id,
+                            user_name=user_name,
+                            user_screen_name=user_screen_name,
+                            #user_utc_offset=user_utc_offset,
+                            user_coordinate=user_coordinates
+                        )
+                        new_twitter.save()

@@ -21,6 +21,9 @@ verbose_userscreenname = _('User Screen Name')
 verbose_userutcoffset = _('User UTC Offset')
 verbose_usercoordinate = _('User Coordinate')
 verbose_note = _('Note')
+verbose_since = _('Since')
+verbose_until = _('Until')
+verbose_method = _('Method')
 
 
 class Source(models.Model):
@@ -30,6 +33,11 @@ class Source(models.Model):
     name = models.CharField(
         max_length=100,
         verbose_name=verbose_name
+    )
+    username = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=verbose_username
     )
     created = models.DateTimeField(
         default=timezone.now,
@@ -52,10 +60,30 @@ class Source(models.Model):
         default='INACTIVE',
         verbose_name=verbose_status
     )
+    METHOD_CHOICES = (
+        ('TWEEPY', _('TWEEPY')),
+        ('GOT', _('GOT')),
+    )
+    method = models.CharField(
+        max_length=50,
+        choices=METHOD_CHOICES,
+        default='TWEEPY',
+        verbose_name=verbose_method
+    )
     note = models.TextField(
         blank=True,
         null=True,
         verbose_name=verbose_note
+    )
+    since = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=verbose_since
+    )
+    until = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=verbose_until
     )
 
     class Meta:
@@ -63,7 +91,7 @@ class Source(models.Model):
         get_latest_by = 'pk'
 
     def __unicode__(self):
-        return '[%s] - %s - %s' % (self.name, self.status, self.created)
+        return '[%s] - %s' % (self.name, self.status)
 
 
 class Keyword(models.Model):
@@ -74,6 +102,8 @@ class Keyword(models.Model):
     )
     keyword = models.CharField(
         max_length=100,
+        blank=False,
+        null=False,
         verbose_name=verbose_keyword
     )
 
@@ -89,7 +119,7 @@ class Twitter(models.Model):
     keyword = models.ForeignKey(
         Keyword,
         related_name='tweets',
-        verbose_name=verbose_keyword
+        verbose_name=verbose_keyword,
     )
     tweet_id = models.BigIntegerField(
         verbose_name=verbose_tweetid
@@ -103,10 +133,15 @@ class Twitter(models.Model):
         verbose_name=verbose_tweettext
     )
     user_id = models.BigIntegerField(
+        blank=True,
+        null=True,
+        default=0,
         verbose_name=verbose_userid
     )
     user_name = models.CharField(
         max_length=100,
+        blank=True,
+        null=True,
         verbose_name=verbose_username
     )
     user_screen_name = models.CharField(
@@ -114,11 +149,13 @@ class Twitter(models.Model):
         verbose_name=verbose_userscreenname
     )
     user_utc_offset = models.IntegerField(
+        blank=True,
+        null=True,
         verbose_name=verbose_userutcoffset
     )
     user_coordinate = models.PointField(
-        null=True,
         blank=True,
+        null=True,
         verbose_name=verbose_usercoordinate
     )
 

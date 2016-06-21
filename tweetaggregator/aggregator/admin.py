@@ -20,6 +20,9 @@ class SourceAdmin(admin.ModelAdmin):
     fieldsets = [
         (verbose_source_details, {
             'fields': [
+                'method',
+                'username',
+                ('since', 'until'),
                 'name',
                 'created',
                 'type',
@@ -33,12 +36,13 @@ class SourceAdmin(admin.ModelAdmin):
         'created',
         'updated',
         'type',
+        'method',
         'status'
     ]
     readonly_fields = ['updated']
     ordering = ['-updated', '-created']
     date_hierarchy = 'created'
-    list_filter = ['created', 'type', 'status']
+    list_filter = ['created', 'type', 'status', 'method']
     search_fields = ['name', 'type', 'note']
     inlines = [KeywordInline]
 
@@ -78,7 +82,7 @@ class TwitterAdmin(admin.ModelAdmin):
     ]
     list_display = [
         'keyword',
-        'user_name',
+        'user_screen_name',
         'tweet_id',
         'tweet_created'
     ]
