@@ -81,7 +81,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'tweetaggregator',
-        'USER': 'tweetaggregator',
+        'USER': 'vagrant',
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '',
@@ -137,13 +137,24 @@ STATICFILES_FINDERS = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'assets'),
+)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded')
+
+MEDIA_URL = '/uploaded/'
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components')
+
+# Hourly cron job
 CRONJOBS = [
     ('0 * * * *', 'aggregator.cron.tweet_scheduled_job', '>> /tmp/tweet_scheduled_job.log'),
 ]
 
 # Twitter API
-CONSUMER_KEY = 'sYinutLQ8yFG3rCFTZGhusyMY'
-CONSUMER_SECRET = 'kdE8yPL7vTB7vzIXQmFKtXm6QD3ejoP6Rdgx5fvnEacxi3G2An'
-ACCESS_TOKEN = '714659320047095808-bIjgsI07CoY07jnKab8Dw3r1YUyKcGL'
-ACCESS_SECRET = 'dH8mSgf0avbGIpg1skFTnGHGiU4kh7RRxFp0jdzw0a7wM'
-MAX_TWEETS = 5
+CONSUMER_KEY = 'insert twitter consumer key here'
+CONSUMER_SECRET = 'insert twitter consumer secret here'
+ACCESS_TOKEN = 'insert twitter access token here'
+ACCESS_SECRET = 'insert twitter access secret here'
+MAX_TWEETS = 100
