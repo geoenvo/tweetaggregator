@@ -24,6 +24,8 @@ verbose_note = _('Note')
 verbose_since = _('Since')
 verbose_until = _('Until')
 verbose_method = _('Method')
+verbose_userurl = _('User URL')
+verbose_userlocation = _('User Location')
 
 
 class Source(models.Model):
@@ -120,6 +122,7 @@ class Twitter(models.Model):
         Keyword,
         related_name='tweets',
         verbose_name=verbose_keyword,
+        null=True
     )
     tweet_id = models.BigIntegerField(
         verbose_name=verbose_tweetid
@@ -135,7 +138,6 @@ class Twitter(models.Model):
     user_id = models.BigIntegerField(
         blank=True,
         null=True,
-        default=0,
         verbose_name=verbose_userid
     )
     user_name = models.CharField(
@@ -143,6 +145,12 @@ class Twitter(models.Model):
         blank=True,
         null=True,
         verbose_name=verbose_username
+    )
+    user_URL = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name=verbose_userurl
     )
     user_screen_name = models.CharField(
         max_length=100,
@@ -157,6 +165,12 @@ class Twitter(models.Model):
         blank=True,
         null=True,
         verbose_name=verbose_usercoordinate
+    )
+    user_location = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name=verbose_userlocation
     )
 
     class Meta:

@@ -21,9 +21,9 @@ class SourceAdmin(admin.ModelAdmin):
         (verbose_source_details, {
             'fields': [
                 'method',
+                'name',
                 'username',
                 ('since', 'until'),
-                'name',
                 'created',
                 'type',
                 'status',
@@ -71,12 +71,14 @@ class TwitterAdmin(admin.ModelAdmin):
                 'keyword',
                 'user_name',
                 'user_screen_name',
+                'user_URL',
                 'user_id',
                 'tweet_created',
                 'tweet_id',
                 'tweet_text',
                 'user_utc_offset',
-                'user_coordinate'
+                'user_coordinate',
+                'user_location'
             ]
         })
     ]
@@ -84,6 +86,7 @@ class TwitterAdmin(admin.ModelAdmin):
         'keyword',
         'user_screen_name',
         'tweet_id',
+        'user_coordinate',
         'tweet_created'
     ]
     ordering = ['-tweet_created']
