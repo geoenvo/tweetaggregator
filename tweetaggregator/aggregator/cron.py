@@ -94,29 +94,29 @@ def tweet_scheduled_job():
                             )
                             new_twitter.save()
 ##usingGOT-by username
-            #if (active_source.username != '' and active_source.keywords.all() == None and active_source.since == None and active_source.until == None):
-            if (active_source.username != '' and active_source.keywords. == '' and active_source.since == None and active_source.until == None):
-                username = active_source.username
-                tweetCriteria = got.manager.TweetCriteria().setUsername(username).setMaxTweets(max_tweets)
-                searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
-                for status in searched_tweets:
-                    tweet_text = status.text
-                    tweet_text = "{}".format(smart_str(tweet_text))
-                    tweet_id = status.id
-                    tweet_created = status.date
-                    user_screen_name = status.username
-                    user_name = ''
-                    user_location = status.geo
-                    new_twitter = Twitter(
-                        tweet_text=tweet_text,
-                        keyword=a_keyword,
-                        tweet_id=tweet_id,
-                        tweet_created=tweet_created,
-                        user_name=user_name,
-                        user_screen_name=user_screen_name,
-                        user_location=user_location
-                    )
-                    new_twitter.save()
+            if (active_source.username != '' and active_source.since == None and active_source.until == None):
+                keywords = active_source.keywords.all()
+                if not keywords:
+                    username = active_source.username
+                    tweetCriteria = got.manager.TweetCriteria().setUsername(username).setMaxTweets(max_tweets)
+                    searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
+                    for status in searched_tweets:
+                        tweet_text = status.text
+                        tweet_text = "{}".format(smart_str(tweet_text))
+                        tweet_id = status.id
+                        tweet_created = status.date
+                        user_screen_name = status.username
+                        user_name = ''
+                        user_location = status.geo
+                        new_twitter = Twitter(
+                            tweet_text=tweet_text,
+                            tweet_id=tweet_id,
+                            tweet_created=tweet_created,
+                            user_name=user_name,
+                            user_screen_name=user_screen_name,
+                            user_location=user_location
+                        )
+                        new_twitter.save()
 #usingGOT-by username&keyword
             if (active_source.username != '' and active_source.since == None and active_source.until == None):
                 username = active_source.username
@@ -143,7 +143,33 @@ def tweet_scheduled_job():
                             user_location=user_location
                         )
                         new_twitter.save()
-#usingGOT-by daterange&keyword
+#usingGOT-by user&daterange
+            if (active_source.username != '' and active_source.since != None and active_source.until != None):
+                keywords = active_source.keywords.all()
+                if not keywords:
+                    username = active_source.username
+                    since = active_source.since.strftime('%Y-%m-%d')
+                    until = active_source.until.strftime('%Y-%m-%d')
+                    tweetCriteria = got.manager.TweetCriteria().setUsername(username).setSince(since).setUntil(until).setMaxTweets(max_tweets)
+                    searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
+                    for status in searched_tweets:
+                        tweet_text = status.text
+                        tweet_text = "{}".format(smart_str(tweet_text))
+                        tweet_id = status.id
+                        tweet_created = status.date
+                        user_screen_name = status.username
+                        user_name = ''
+                        user_location = status.geo
+                        new_twitter = Twitter(
+                            tweet_text=tweet_text,
+                            tweet_id=tweet_id,
+                            tweet_created=tweet_created,
+                            user_name=user_name,
+                            user_screen_name=user_screen_name,
+                            user_location=user_location
+                        )
+                        new_twitter.save()
+#usingGOT-by keyword&daterange
             if (active_source.username == '' and active_source.since != None and active_source.until != None):
                 since = active_source.since.strftime('%Y-%m-%d')
                 until = active_source.until.strftime('%Y-%m-%d')
@@ -178,8 +204,8 @@ def tweet_scheduled_job():
                 keywords = active_source.keywords.all()
                 for a_keyword in keywords:
                     query = a_keyword.keyword
-                    tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setMaxTweets(max_tweets)
-                    tweetCriteria = tweet_Criteria.setSince(since).setUntil(until)
+                    tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setSince(since).setUntil(until)
+                    tweetCriteria = tweet_Criteria.setMaxTweets(max_tweets)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
                         tweet_text = status.text

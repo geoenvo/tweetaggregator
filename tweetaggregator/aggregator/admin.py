@@ -83,9 +83,9 @@ class TwitterAdmin(admin.ModelAdmin):
         })
     ]
     list_display = [
+        'tweet_id',
         'keyword',
         'user_screen_name',
-        'tweet_id',
         'user_coordinate',
         'tweet_created'
     ]
