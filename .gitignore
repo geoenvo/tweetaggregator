@@ -8,6 +8,5 @@ Vagrantfile
 tweetaggregator/static/*
 tweetaggregator/components/*
 tweetaggregator/uploaded/*
-tweetaggregator/tweetaggregator/settings/local_settings.py
-tweetaggregator/tweetaggregator/settings/production.py
+tweetaggregator/tweetaggregator/settings.py
 node-v*
