@@ -33,13 +33,15 @@ def tweet_scheduled_job():
                 query = a_keyword.keyword
                 searched_tweets = [status for status in tweepy.Cursor(api.search, q=query).items(max_tweets)]
                 for status in searched_tweets:
+                    tweet_id = status.id_str
+                    if Twitter.objects.filter(tweet_id=tweet_id):
+                        break
                     tweet_localcreatedtime = status.created_at + timedelta(hours=7)
                     diff = datetime.now() - tweet_localcreatedtime
                     diff_hours = diff.total_seconds() / 3600
                     if diff_hours <= 1:
                         tweet_text = status.text.translate(non_bmp_map)
                         tweet_text = "{}".format(smart_str(tweet_text))
-                        tweet_id = status.id_str
                         tweet_created = status.created_at
                         user_id = status.user.id
                         user_name = status.user.name
@@ -72,13 +74,15 @@ def tweet_scheduled_job():
                     tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setMaxTweets(max_tweets)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
+                        tweet_id = status.id
+                        if Twitter.objects.filter(tweet_id=tweet_id):
+                            break
                         tweet_createdtime = status.date
                         diff = datetime.now() - tweet_createdtime
                         diff_hours = diff.total_seconds() / 3600
                         if diff_hours <= 1:
                             tweet_text = status.text
                             tweet_text = "{}".format(smart_str(tweet_text))
-                            tweet_id = status.id
                             tweet_created = status.date
                             user_screen_name = status.username
                             user_name = ''
@@ -93,7 +97,7 @@ def tweet_scheduled_job():
                                 user_location=user_location
                             )
                             new_twitter.save()
-##usingGOT-by username
+#usingGOT-by username
             if (active_source.username != '' and active_source.since == None and active_source.until == None):
                 keywords = active_source.keywords.all()
                 if not keywords:
@@ -101,6 +105,9 @@ def tweet_scheduled_job():
                     tweetCriteria = got.manager.TweetCriteria().setUsername(username).setMaxTweets(max_tweets)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
+                        tweet_id = status.id
+                        if Twitter.objects.filter(tweet_id=tweet_id):
+                            break
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
                         tweet_id = status.id
@@ -126,9 +133,11 @@ def tweet_scheduled_job():
                     tweetCriteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setMaxTweets(max_tweets)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
+                        tweet_id = status.id
+                        if Twitter.objects.filter(tweet_id=tweet_id):
+                            break
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
-                        tweet_id = status.id
                         tweet_created = status.date
                         user_name = ''
                         user_screen_name = status.username
@@ -144,18 +153,27 @@ def tweet_scheduled_job():
                         )
                         new_twitter.save()
 #usingGOT-by user&daterange
-            if (active_source.username != '' and active_source.since != None and active_source.until != None):
+            if (active_source.username != '' and (active_source.since != None or active_source.until != None)):
                 keywords = active_source.keywords.all()
                 if not keywords:
                     username = active_source.username
-                    since = active_source.since.strftime('%Y-%m-%d')
-                    until = active_source.until.strftime('%Y-%m-%d')
-                    tweetCriteria = got.manager.TweetCriteria().setUsername(username).setSince(since).setUntil(until).setMaxTweets(max_tweets)
+                    if (active_source.since != None and active_source.until == None):
+                        since = active_source.since.strftime('%Y-%m-%d')
+                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setSince(since).setMaxTweets(max_tweets)
+                    if (active_source.since == None and active_source.until != None):
+                        until = active_source.until.strftime('%Y-%m-%d')
+                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setUntil(until).setMaxTweets(max_tweets)
+                    if (active_source.since != None and active_source.until != None):
+                        since = active_source.since.strftime('%Y-%m-%d')
+                        until = active_source.until.strftime('%Y-%m-%d')
+                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setSince(since).setUntil(until).setMaxTweets(max_tweets)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
+                        tweet_id = status.id
+                        if Twitter.objects.filter(tweet_id=tweet_id):
+                            break
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
-                        tweet_id = status.id
                         tweet_created = status.date
                         user_screen_name = status.username
                         user_name = ''
@@ -179,9 +197,11 @@ def tweet_scheduled_job():
                     tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setSince(since).setUntil(until).setMaxTweets(max_tweets)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
+                        tweet_id = status.id
+                        if Twitter.objects.filter(tweet_id=tweet_id):
+                            break
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
-                        tweet_id = status.id
                         tweet_created = status.date
                         user_name = ''
                         user_screen_name = status.username
@@ -208,9 +228,11 @@ def tweet_scheduled_job():
                     tweetCriteria = tweet_Criteria.setMaxTweets(max_tweets)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
+                        tweet_id = status.id
+                        if Twitter.objects.filter(tweet_id=tweet_id):
+                            break
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
-                        tweet_id = status.id
                         tweet_created = status.date
                         user_name = ''
                         user_screen_name = status.username
