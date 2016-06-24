@@ -43,8 +43,6 @@ pip install -r requirements.txt
 nodeenv -p --prebuilt
 workon tweetaggregator
 npm install -g bower@1.7.7
-npm install -g phantomjs-prebuilt@2.1.7
-npm install -g casperjs@1.1.1
 
 echo "---------------------------------------------"
 echo "Provisioning complete"
