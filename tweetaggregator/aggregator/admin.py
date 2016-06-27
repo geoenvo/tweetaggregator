@@ -35,7 +35,7 @@ class SourceAdmin(admin.ModelAdmin):
         'name',
         'created',
         'updated',
-        'type',
+        'username',
         'method',
         'status'
     ]
