@@ -10,3 +10,13 @@ django-crontab==0.7.1
 tweepy==3.5.0
 lxml==3.5.0
 pyquery==1.2.10
+
+
+
+
+
+
+
+
+django-nvd3==0.9.7
+-e git+https://github.com/geoenvo/python-nvd3#egg=python-nvd3
