@@ -71,6 +71,7 @@ class TwitterAdmin(admin.ModelAdmin):
                 'keyword',
                 'user_name',
                 'user_screen_name',
+                'tags_tweet',
                 'user_URL',
                 'user_id',
                 'tweet_created',
@@ -85,6 +86,7 @@ class TwitterAdmin(admin.ModelAdmin):
     list_display = [
         'tweet_id',
         'keyword',
+        'tags',
         'user_screen_name',
         'user_coordinate',
         'tweet_created'
@@ -93,6 +95,12 @@ class TwitterAdmin(admin.ModelAdmin):
     date_hierarchy = 'tweet_created'
     list_filter = ['keyword', 'tweet_created', 'user_name']
     search_fields = ['user_name', 'keyword', 'user_screen_name', 'tweet_text']
+
+    def tags(self, twitter):
+        tags = []
+        for tag in twitter.tags_tweet.all():
+            tags.append(str(tag))
+        return ', '.join(tags)
 
 
 admin.site.register(Source, SourceAdmin)
