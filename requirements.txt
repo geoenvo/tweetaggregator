@@ -13,6 +13,11 @@ pyquery==1.2.10
 
 
 
+django-taggit==0.20.1
+
+
+
+
 
 
 
@@ -20,3 +25,4 @@ pyquery==1.2.10
 
 django-nvd3==0.9.7
 -e git+https://github.com/geoenvo/python-nvd3#egg=python-nvd3
+>>>>>>> 890b5b90ab0f0e7228fb682fbc5626d25fc74527

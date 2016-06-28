@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.gis.db import models
-
+from taggit.managers import TaggableManager
 
 verbose_created = _('Created')
 verbose_updated = _('Updated')
@@ -26,6 +26,8 @@ verbose_until = _('Until')
 verbose_method = _('Method')
 verbose_userurl = _('User URL')
 verbose_userlocation = _('User Location')
+verbose_retweets = _('Retweets')
+verbose_favorites = _('Favorites')
 
 
 class Source(models.Model):
@@ -172,6 +174,17 @@ class Twitter(models.Model):
         null=True,
         verbose_name=verbose_userlocation
     )
+    retweets = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name=verbose_retweets
+    )
+    favorites = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name=verbose_favorites
+    )
+    tags_tweet = TaggableManager()
 
     class Meta:
         ordering = ['pk']
