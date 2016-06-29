@@ -176,12 +176,12 @@ class Twitter(models.Model):
     )
     retweets = models.IntegerField(
         blank=True,
-        null=True,
+        default=0,
         verbose_name=verbose_retweets
     )
     favorites = models.IntegerField(
         blank=True,
-        null=True,
+        default=0,
         verbose_name=verbose_favorites
     )
     tags_tweet = TaggableManager()

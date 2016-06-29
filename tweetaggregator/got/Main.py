@@ -1,18 +1,14 @@
 import got
-from got import models, manager
-from got.manager import TweetCriteria, TweetManager
-from got.models import Tweet
-import urllib,urllib2,json,re,datetime,sys
 
 def main():
 	
 	def printTweet(descr, t):
-		print (descr)
-		print ("Username: %s" % t.username)
-		print ("Retweets: %d" % t.retweets)
-		print ("Text: %s" % t.text)
-		print ("Mentions: %s" % t.mentions)
-		print ("Hashtags: %s\n" % t.hashtags)
+		print descr
+		print "Username: %s" % t.username
+		print "Retweets: %d" % t.retweets
+		print "Text: %s" % t.text
+		print "Mentions: %s" % t.mentions
+		print "Hashtags: %s\n" % t.hashtags
 	
 	# Example 1 - Get tweets by username
 	tweetCriteria = got.manager.TweetCriteria().setUsername('barackobama').setMaxTweets(1)
