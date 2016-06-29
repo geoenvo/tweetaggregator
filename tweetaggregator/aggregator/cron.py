@@ -209,13 +209,20 @@ def tweet_scheduled_job():
                         )
                         new_twitter.save()
 #usingGOT-by keyword&daterange
-            if (active_source.username == '' and active_source.since != None and active_source.until != None):
-                since = active_source.since.strftime('%Y-%m-%d')
-                until = active_source.until.strftime('%Y-%m-%d')
+            if (active_source.username == '' and (active_source.since != None or active_source.until != None)):
                 keywords = active_source.keywords.all()
                 for a_keyword in keywords:
                     query = a_keyword.keyword
-                    tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setSince(since).setUntil(until).setMaxTweets(max_tweets)
+                    if (active_source.since != None and active_source.until == None):
+                        since = active_source.since.strftime('%Y-%m-%d')
+                        tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setSince(since).setMaxTweets(max_tweets)
+                    if (active_source.since == None and active_source.until != None):
+                        until = active_source.until.strftime('%Y-%m-%d')
+                        tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setUntil(until).setMaxTweets(max_tweets)
+                    if (active_source.since != None and active_source.until != None):
+                        since = active_source.since.strftime('%Y-%m-%d')
+                        until = active_source.until.strftime('%Y-%m-%d')
+                        tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setSince(since).setUntil(until).setMaxTweets(max_tweets)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
                         tweet_id = status.id
@@ -242,14 +249,21 @@ def tweet_scheduled_job():
                         )
                         new_twitter.save()
 #usingGOT-by daterange&keyword&username
-            if (active_source.username != '' and active_source.since != None and active_source.until != None):
+            if (active_source.username != '' and (active_source.since != None or active_source.until != None)):
                 username = active_source.username
-                since = active_source.since.strftime('%Y-%m-%d')
-                until = active_source.until.strftime('%Y-%m-%d')
                 keywords = active_source.keywords.all()
                 for a_keyword in keywords:
                     query = a_keyword.keyword
-                    tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setSince(since).setUntil(until)
+                    if (active_source.since != None and active_source.until == None):
+                        since = active_source.since.strftime('%Y-%m-%d')'
+                        tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setSince(since)
+                    if (active_source.since == None and active_source.until != None):
+                        until = active_source.until.strftime('%Y-%m-%d')
+                        tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setUntil(until)
+                    if (active_source.since != None and active_source.until != None):
+                        since = active_source.since.strftime('%Y-%m-%d')
+                        until = active_source.until.strftime('%Y-%m-%d')
+                        tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setSince(since).setUntil(until)
                     tweetCriteria = tweet_Criteria.setMaxTweets(max_tweets)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
