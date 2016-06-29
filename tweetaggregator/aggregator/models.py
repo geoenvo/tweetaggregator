@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.gis.db import models
-from taggit.managers import TaggableManager
+from taggit_autosuggest.managers import TaggableManager
+#from taggit.managers import TaggableManager
 
 verbose_created = _('Created')
 verbose_updated = _('Updated')
@@ -106,8 +107,6 @@ class Keyword(models.Model):
     )
     keyword = models.CharField(
         max_length=100,
-        blank=False,
-        null=False,
         verbose_name=verbose_keyword
     )
 
@@ -124,8 +123,9 @@ class Twitter(models.Model):
         Keyword,
         related_name='tweets',
         verbose_name=verbose_keyword,
+        blank=True,
         null=True
-    )
+        )
     tweet_id = models.BigIntegerField(
         verbose_name=verbose_tweetid
     )
@@ -184,7 +184,7 @@ class Twitter(models.Model):
         default=0,
         verbose_name=verbose_favorites
     )
-    tags_tweet = TaggableManager()
+    tags_tweet = TaggableManager(blank=True)
 
     class Meta:
         ordering = ['pk']
