@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'djangobower',
     'aggregator',
     'taggit',
+    'charts',
+    'django_nvd3',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -155,6 +157,8 @@ BOWER_INSTALLED_APPS = (
     'jquery#2.2.1',
     'bootstrap#3.3.6',
     'font-awesome#4.5.0',
+    'd3#3.5.17',
+    'nvd3#1.8.3',
 )
 
 CKEDITOR_CONFIGS = {

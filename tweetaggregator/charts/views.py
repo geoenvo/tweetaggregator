@@ -2,12 +2,6 @@ from django.shortcuts import render_to_response
 from aggregator.models import *
 import calendar
 
-'''def index(request):
-    all_user = Source.objects.all()
-    context = {'all_user': all_user,}
-    return render(request, 'charts/index.html', context)
-'''
-
 def index(request, user):
     #S = Source.objects.all()
     T = Twitter.objects.all()
