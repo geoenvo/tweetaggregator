@@ -23,7 +23,7 @@ fi
 echo "---------------------------------------------"
 echo "Upgrading packages"
 echo "---------------------------------------------"
-apt-get update && apt-get -y upgrade && apt-get -y dist-upgrade
+apt-get update && apt-get -y upgrade
 
 echo "---------------------------------------------"
 echo "Installing dependencies (build libs, Git, PostgreSQL, PostGIS)"
