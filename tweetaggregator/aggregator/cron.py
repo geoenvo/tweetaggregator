@@ -47,6 +47,9 @@ def tweet_scheduled_job():
                         user_name = status.user.name
                         user_screen_name = status.user.screen_name
                         user_URL = status.user.url
+                        favorites = status.favorited
+                        if hasattr(status, 'retweeted_status'):
+                            retweets = status.retweet_count
                         user_utc_offset = status.user.utc_offset
                         user_coordinates = ''
                         if status.coordinates:
@@ -61,7 +64,9 @@ def tweet_scheduled_job():
                             user_screen_name=user_screen_name,
                             user_utc_offset=user_utc_offset,
                             user_coordinate=user_coordinates,
-                            user_URL=user_URL
+                            user_URL=user_URL,
+                            retweets=retweets,
+                            favorites=favorites
                         )
                         new_twitter.save()
 #usingGOT(GetOldTweets)
@@ -87,6 +92,8 @@ def tweet_scheduled_job():
                             user_screen_name = status.username
                             user_name = ''
                             user_location = status.geo
+                            retweets = status.retweets
+                            favorites = status.favorites
                             new_twitter = Twitter(
                                 tweet_text=tweet_text,
                                 keyword=a_keyword,
@@ -94,7 +101,9 @@ def tweet_scheduled_job():
                                 tweet_created=tweet_created,
                                 user_name=user_name,
                                 user_screen_name=user_screen_name,
-                                user_location=user_location
+                                user_location=user_location,
+                                retweets=retweets,
+                                favorites=favorites
                             )
                             new_twitter.save()
 #usingGOT-by username
@@ -115,13 +124,17 @@ def tweet_scheduled_job():
                         user_screen_name = status.username
                         user_name = ''
                         user_location = status.geo
+                        retweets = status.retweets
+                        favorites = status.favorites
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             tweet_id=tweet_id,
                             tweet_created=tweet_created,
                             user_name=user_name,
                             user_screen_name=user_screen_name,
-                            user_location=user_location
+                            user_location=user_location,
+                            retweets=retweets,
+                            favorites=favorites
                         )
                         new_twitter.save()
 #usingGOT-by username&keyword
@@ -142,6 +155,8 @@ def tweet_scheduled_job():
                         user_name = ''
                         user_screen_name = status.username
                         user_location = status.geo
+                        retweets = status.retweets
+                        favorites = status.favorites
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             keyword=a_keyword,
@@ -149,7 +164,9 @@ def tweet_scheduled_job():
                             tweet_created=tweet_created,
                             user_name=user_name,
                             user_screen_name=user_screen_name,
-                            user_location=user_location
+                            user_location=user_location,
+                            retweets=retweets,
+                            favorites=favorites
                         )
                         new_twitter.save()
 #usingGOT-by user&daterange
@@ -178,13 +195,17 @@ def tweet_scheduled_job():
                         user_screen_name = status.username
                         user_name = ''
                         user_location = status.geo
+                        retweets = status.retweets
+                        favorites = status.favorites
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             tweet_id=tweet_id,
                             tweet_created=tweet_created,
                             user_name=user_name,
                             user_screen_name=user_screen_name,
-                            user_location=user_location
+                            user_location=user_location,
+                            retweets=retweets,
+                            favorites=favorites
                         )
                         new_twitter.save()
 #usingGOT-by keyword&daterange
@@ -206,6 +227,8 @@ def tweet_scheduled_job():
                         user_name = ''
                         user_screen_name = status.username
                         user_location = status.geo
+                        retweets = status.retweets
+                        favorites = status.favorites
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             keyword=a_keyword,
@@ -213,7 +236,9 @@ def tweet_scheduled_job():
                             tweet_created=tweet_created,
                             user_name=user_name,
                             user_screen_name=user_screen_name,
-                            user_location=user_location
+                            user_location=user_location,
+                            retweets=retweets,
+                            favorites=favorites
                         )
                         new_twitter.save()
 #usingGOT-by daterange&keyword&username
@@ -237,6 +262,8 @@ def tweet_scheduled_job():
                         user_name = ''
                         user_screen_name = status.username
                         user_location = status.geo
+                        retweets = status.retweets
+                        favorites = status.favorites
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             keyword=a_keyword,
@@ -244,6 +271,8 @@ def tweet_scheduled_job():
                             tweet_created=tweet_created,
                             user_name=user_name,
                             user_screen_name=user_screen_name,
-                            user_location=user_location
+                            user_location=user_location,
+                            retweets=retweets,
+                            favorites=favorites
                         )
                         new_twitter.save()

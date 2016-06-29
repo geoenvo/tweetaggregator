@@ -77,6 +77,8 @@ class TwitterAdmin(admin.ModelAdmin):
                 'tweet_created',
                 'tweet_id',
                 'tweet_text',
+                'retweets',
+                'favorites',
                 'user_utc_offset',
                 'user_coordinate',
                 'user_location'
@@ -88,6 +90,8 @@ class TwitterAdmin(admin.ModelAdmin):
         'keyword',
         'tags',
         'user_screen_name',
+        'retweets',
+        'favorites',
         'user_coordinate',
         'tweet_created'
     ]
