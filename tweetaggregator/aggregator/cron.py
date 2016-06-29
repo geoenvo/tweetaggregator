@@ -255,7 +255,7 @@ def tweet_scheduled_job():
                 for a_keyword in keywords:
                     query = a_keyword.keyword
                     if (active_source.since != None and active_source.until == None):
-                        since = active_source.since.strftime('%Y-%m-%d')'
+                        since = active_source.since.strftime('%Y-%m-%d')
                         tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setSince(since)
                     if (active_source.since == None and active_source.until != None):
                         until = active_source.until.strftime('%Y-%m-%d')
