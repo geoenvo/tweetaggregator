@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'djangobower',
     'aggregator',
     'taggit',
+    'taggit_autosuggest',
     'charts',
     'django_nvd3',
 ]
@@ -196,3 +197,6 @@ CONSUMER_SECRET = 'insert twitter consumer secret here'
 ACCESS_TOKEN = 'insert twitter access token here'
 ACCESS_SECRET = 'insert twitter access secret here'
 MAX_TWEETS = 100
+
+# Django taggit
+TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS = 20

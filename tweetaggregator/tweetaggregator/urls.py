@@ -17,11 +17,15 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
+import taggit_autosuggest.urls
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^charts/', include('charts.urls')),
+    url(r'^taggit_suggest/', include('taggit_autosuggest.urls')),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(
