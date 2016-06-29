@@ -1,0 +1,27 @@
+{% load static %}
+<!-- nvd3 -->
+<link media="all" href="{% static 'nvd3/build/nv.d3.css' %}" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src='{% static 'd3/d3.min.js' %}'></script>
+<script type="text/javascript" src='{% static 'nvd3/build/nv.d3.min.js' %}'></script>
+
+<!-- jquery -->
+<script type="text/javascript" src='{% static 'jquery/dist/jquery.js' %}'></script>
+<script type="text/javascript" src='{% static 'jquery/dist/jquery.min.js' %}'></script>
+
+{% load nvd3_tags %}
+<head>
+    {% include_chart_jscss %}
+    {% load_chart charttype chartdata chartcontainer extra %}
+    {% load_chart charttype2 chartdata2 chartcontainer2 extra %}
+    {% load_chart charttype3 chartdata3 chartcontainer3 extra %}
+</head>
+<body>
+    <h3> 1. Jumlah Tweet/Bulan </h3>
+    {% include_container chartcontainer 300 800 %}
+    <hr>
+    <h3> 2. Jumlah Tweet/Kategori </h3>
+    {% include_container chartcontainer2 %}
+    <hr>
+    <h3> 3. Jumlah Keywords </h3>
+    {% include_container chartcontainer3 300 800 %}
+</body>
