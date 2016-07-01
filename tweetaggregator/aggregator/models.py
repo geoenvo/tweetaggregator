@@ -4,7 +4,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.gis.db import models
 from taggit_autosuggest.managers import TaggableManager
-#from taggit.managers import TaggableManager
 
 verbose_created = _('Created')
 verbose_updated = _('Updated')
@@ -29,6 +28,7 @@ verbose_userurl = _('User URL')
 verbose_userlocation = _('User Location')
 verbose_retweets = _('Retweets')
 verbose_favorites = _('Favorites')
+verbose_retweetid = _('Retweet ID')
 
 
 class Source(models.Model):
@@ -125,7 +125,7 @@ class Twitter(models.Model):
         verbose_name=verbose_keyword,
         blank=True,
         null=True
-        )
+    )
     tweet_id = models.BigIntegerField(
         verbose_name=verbose_tweetid
     )
@@ -191,4 +191,66 @@ class Twitter(models.Model):
         get_latest_by = 'pk'
 
     def __unicode__(self):
-        return '[%s] - %s - %s' % (self.user_name, self.user_screen_name, self.tweet_created)
+        return '[%s] - %s - %s' % (self.tweet_id, self.user_screen_name, self.tweet_created)
+
+
+class Retweet(models.Model):
+    tweet_id = models.ForeignKey(
+        Twitter,
+        verbose_name=verbose_tweetid
+    )
+    retweet_id = models.BigIntegerField(
+        verbose_name=verbose_retweetid
+    )
+    retweet_created = models.DateTimeField(
+        default=timezone.now,
+        verbose_name=verbose_tweetcreated
+    )
+    user_id = models.BigIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=verbose_userid
+    )
+    user_name = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name=verbose_username
+    )
+    user_URL = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name=verbose_userurl
+    )
+    user_screen_name = models.CharField(
+        max_length=100,
+        verbose_name=verbose_userscreenname
+    )
+    user_utc_offset = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name=verbose_userutcoffset
+    )
+    user_coordinate = models.PointField(
+        blank=True,
+        null=True,
+        verbose_name=verbose_usercoordinate
+    )
+    retweets = models.IntegerField(
+        blank=True,
+        default=0,
+        verbose_name=verbose_retweets
+    )
+    favorites = models.IntegerField(
+        blank=True,
+        default=0,
+        verbose_name=verbose_favorites
+    )
+
+    class Meta:
+        ordering = ['pk']
+        get_latest_by = 'pk'
+
+    def __unicode__(self):
+        return '[%s] - %s' % (self.user_screen_name, self.retweet_created)
