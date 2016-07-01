@@ -8,7 +8,7 @@ import tweepy
 from tweepy import OAuthHandler
 
 import got
-from .models import Source, Twitter
+from .models import Source, Twitter, Retweet
 
 
 def tweet_scheduled_job():
@@ -42,12 +42,12 @@ def tweet_scheduled_job():
                     if diff_hours <= 1:
                         tweet_text = status.text.translate(non_bmp_map)
                         tweet_text = "{}".format(smart_str(tweet_text))
-                        tweet_created = status.created_at
+                        tweet_created = tweet_localcreatedtime
                         user_id = status.user.id
                         user_name = status.user.name
                         user_screen_name = status.user.screen_name
                         user_URL = status.user.url
-                        favorites = status.favorited
+                        favorites = status.favorite_count
                         if hasattr(status, 'retweeted_status'):
                             retweets = status.retweet_count
                         user_utc_offset = status.user.utc_offset
@@ -290,3 +290,49 @@ def tweet_scheduled_job():
                             favorites=favorites
                         )
                         new_twitter.save()
+
+
+def check_retweet_scheduled_job():
+    consumer_key = settings.CONSUMER_KEY
+    consumer_secret = settings.CONSUMER_SECRET
+    access_token = settings.ACCESS_TOKEN
+    access_secret = settings.ACCESS_SECRET
+
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_secret)
+    api = tweepy.API(auth)
+
+    sources = Twitter.objects.all()
+    for source in sources:
+        if source.retweets > 0:
+            tweet_id = source.tweet_id
+            tweetid = Twitter.objects.get(tweet_id=tweet_id)
+            retweets = api.retweets(str(tweet_id), count=100)
+            for a_retweet in retweets:
+                retweet_id = a_retweet.id_str
+                if Retweet.objects.filter(retweet_id=retweet_id):
+                    break
+                a_retweet_localcreatedtime = a_retweet.created_at + timedelta(hours=7)
+                retweet_created = a_retweet_localcreatedtime
+                user_id = a_retweet.user.id
+                user_name = a_retweet.user.name
+                user_screen_name = a_retweet.user.screen_name
+                user_URL = a_retweet.user.url
+                favorites = a_retweet.favorite_count
+                user_utc_offset = a_retweet.user.utc_offset
+                user_coordinates = ''
+                if a_retweet.coordinates:
+                    user_coordinates = a_retweet.coordinates['coordinates']
+                new_retweet = Retweet(
+                    tweet_id=tweetid,
+                    retweet_id=retweet_id,
+                    retweet_created=retweet_created,
+                    user_id=user_id,
+                    user_name=user_name,
+                    user_URL=user_URL,
+                    user_screen_name=user_screen_name,
+                    user_utc_offset=user_utc_offset,
+                    user_coordinate=user_coordinates,
+                    favorites=favorites
+                        )
+                new_retweet.save()
