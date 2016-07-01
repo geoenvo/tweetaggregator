@@ -3,13 +3,14 @@ from __future__ import unicode_literals
 from django.utils.translation import gettext_lazy as _
 from django.contrib.gis import admin
 
-from .models import Source, Keyword, Twitter, Retweet
+from .models import Source, Keyword, Twitter, Retweet, Source_Property
 
 
 verbose_source_details = _('Source details')
 verbose_twitter_details = _('Twitter details')
 verbose_keyword_details = _('Keyword details')
 verbose_retweet_details = _('Retweet details')
+verbose_source_property_details = _('Source Property details')
 
 
 class KeywordInline(admin.TabularInline):
@@ -121,7 +122,8 @@ class RetweetAdmin(admin.ModelAdmin):
                 'user_URL',
                 'user_utc_offset',
                 'user_coordinate',
-                'retweets',
+                'followers_count',
+                'following_count',
                 'favorites'
             ]
         })
@@ -129,6 +131,8 @@ class RetweetAdmin(admin.ModelAdmin):
     list_display = [
         'tweet_id',
         'user_screen_name',
+        'followers_count',
+        'following_count',
         'favorites',
         'retweet_created'
     ]
@@ -138,7 +142,29 @@ class RetweetAdmin(admin.ModelAdmin):
     search_fields = ['user_name', 'user_screen_name', 'tweet_id', 'retweet_id', 'retweet_created']
 
 
+class SourcePropertyAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (verbose_source_property_details, {
+            'fields': [
+                'source',
+                'created',
+                'followers_count',
+                'following_count'
+            ]
+        })
+    ]
+    list_display = [
+        'source',
+        'created',
+        'followers_count',
+        'following_count'
+    ]
+    list_filter = ['source__name', 'source__username', 'source__method']
+    search_fields = ['source__name', 'source__username', 'source__method', 'created']
+
+
 admin.site.register(Source, SourceAdmin)
 admin.site.register(Keyword, KeywordAdmin)
 admin.site.register(Twitter, TwitterAdmin)
 admin.site.register(Retweet, RetweetAdmin)
+admin.site.register(Source_Property, SourcePropertyAdmin)

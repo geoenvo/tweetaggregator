@@ -190,6 +190,7 @@ EMAIL_USE_TLS = True
 CRONJOBS = [
     ('0 * * * *', 'aggregator.cron.tweet_scheduled_job', '>> /tmp/tweet_scheduled_job.log'),
     ('0 * * * *', 'aggregator.cron.check_retweet_scheduled_job', '>> /tmp/check_retweet_scheduled_job.log'),
+    ('0 * * * *', 'aggregator.cron.source_property_scheduled_job', '>> /tmp/source_property_scheduled_job.log'),
 ]
 
 # Twitter API
