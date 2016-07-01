@@ -356,14 +356,12 @@ def source_property_scheduled_job():
     for active_source in sources:
         if active_source.username != '':
             source = active_source
-            created = active_source.created
             name = active_source.username
             user = api.get_user(name)
             followers_count = user.followers_count
             following_count = user.friends_count
             new_source_property = Source_Property(
                             source=source,
-                            created=created,
                             followers_count=followers_count,
                             following_count=following_count,
                         )
