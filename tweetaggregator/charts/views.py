@@ -1,7 +1,39 @@
-from django.shortcuts import render_to_response
+import datetime
+
+from django.shortcuts import render_to_response, render
 from aggregator.models import *
 import calendar
 import numpy as np
+
+
+def tweet_charts(request, users):
+    usernames = users.split(',')
+    usernames = filter(None, usernames)
+    
+    # Check if username actually exists in Source
+    valid_usernames = []
+    for username in usernames:
+        # ORM query: https://docs.djangoproject.com/en/1.9/ref/models/querysets/
+        if Source.objects.filter(username=username).exists():
+            valid_usernames.append(username)
+    print valid_usernames
+    # Get username's tweet count per month so far this year
+    now = datetime.datetime.now()
+    current_year = now.year
+    current_month = now.month
+    print current_year, current_month
+    user_tweets = {}
+    for valid_username in valid_usernames:
+        user_tweets[valid_username] = []
+        for month in range(1, current_month + 1):
+            tweet_month_count = Twitter.objects.filter(user_screen_name=valid_username, tweet_created__year=current_year, tweet_created__month=month).count()
+            user_tweets[valid_username].append([month, tweet_month_count])
+    print user_tweets
+    context = {
+        'user_tweets': user_tweets
+    }
+    return render(request, 'charts/tweet_charts.html', context)
+
 
 def index(request, user):
     T = Twitter.objects.all()
