@@ -8,7 +8,7 @@ import tweepy
 from tweepy import OAuthHandler
 
 import got
-from .models import Source, Twitter, Retweet
+from .models import Source, Twitter, Retweet, Source_Property
 
 
 def tweet_scheduled_job():
@@ -76,7 +76,7 @@ def tweet_scheduled_job():
                 keywords = active_source.keywords.all()
                 for a_keyword in keywords:
                     query = a_keyword.keyword
-                    tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setMaxTweets(max_tweets)
+                    tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
                         tweet_id = status.id
@@ -111,7 +111,7 @@ def tweet_scheduled_job():
                 keywords = active_source.keywords.all()
                 if not keywords:
                     username = active_source.username
-                    tweetCriteria = got.manager.TweetCriteria().setUsername(username).setMaxTweets(max_tweets)
+                    tweetCriteria = got.manager.TweetCriteria().setUsername(username)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
                         tweet_id = status.id
@@ -143,7 +143,7 @@ def tweet_scheduled_job():
                 keywords = active_source.keywords.all()
                 for a_keyword in keywords:
                     query = a_keyword.keyword
-                    tweetCriteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setMaxTweets(max_tweets)
+                    tweetCriteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
                         tweet_id = status.id
@@ -176,14 +176,14 @@ def tweet_scheduled_job():
                     username = active_source.username
                     if (active_source.since != None and active_source.until == None):
                         since = active_source.since.strftime('%Y-%m-%d')
-                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setSince(since).setMaxTweets(max_tweets)
+                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setSince(since)
                     if (active_source.since == None and active_source.until != None):
                         until = active_source.until.strftime('%Y-%m-%d')
-                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setUntil(until).setMaxTweets(max_tweets)
+                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setUntil(until)
                     if (active_source.since != None and active_source.until != None):
                         since = active_source.since.strftime('%Y-%m-%d')
                         until = active_source.until.strftime('%Y-%m-%d')
-                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setSince(since).setUntil(until).setMaxTweets(max_tweets)
+                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setSince(since).setUntil(until)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
                         tweet_id = status.id
@@ -215,14 +215,14 @@ def tweet_scheduled_job():
                     query = a_keyword.keyword
                     if (active_source.since != None and active_source.until == None):
                         since = active_source.since.strftime('%Y-%m-%d')
-                        tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setSince(since).setMaxTweets(max_tweets)
+                        tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setSince(since)
                     if (active_source.since == None and active_source.until != None):
                         until = active_source.until.strftime('%Y-%m-%d')
-                        tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setUntil(until).setMaxTweets(max_tweets)
+                        tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setUntil(until)
                     if (active_source.since != None and active_source.until != None):
                         since = active_source.since.strftime('%Y-%m-%d')
                         until = active_source.until.strftime('%Y-%m-%d')
-                        tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setSince(since).setUntil(until).setMaxTweets(max_tweets)
+                        tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query).setSince(since).setUntil(until)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
                         tweet_id = status.id
@@ -256,15 +256,14 @@ def tweet_scheduled_job():
                     query = a_keyword.keyword
                     if (active_source.since != None and active_source.until == None):
                         since = active_source.since.strftime('%Y-%m-%d')
-                        tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setSince(since)
+                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setSince(since)
                     if (active_source.since == None and active_source.until != None):
                         until = active_source.until.strftime('%Y-%m-%d')
-                        tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setUntil(until)
+                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setUntil(until)
                     if (active_source.since != None and active_source.until != None):
                         since = active_source.since.strftime('%Y-%m-%d')
                         until = active_source.until.strftime('%Y-%m-%d')
-                        tweet_Criteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setSince(since).setUntil(until)
-                    tweetCriteria = tweet_Criteria.setMaxTweets(max_tweets)
+                        tweetCriteria = got.manager.TweetCriteria().setUsername(username).setQuerySearch(query).setSince(since).setUntil(until)
                     searched_tweets = got.manager.TweetManager.getTweets(tweetCriteria)
                     for status in searched_tweets:
                         tweet_id = status.id
@@ -319,6 +318,8 @@ def check_retweet_scheduled_job():
                 user_screen_name = a_retweet.user.screen_name
                 user_URL = a_retweet.user.url
                 favorites = a_retweet.favorite_count
+                followers_count = a_retweet.user.followers_count
+                following_count = a_retweet.user.friends_count
                 user_utc_offset = a_retweet.user.utc_offset
                 user_coordinates = ''
                 if a_retweet.coordinates:
@@ -333,6 +334,35 @@ def check_retweet_scheduled_job():
                     user_screen_name=user_screen_name,
                     user_utc_offset=user_utc_offset,
                     user_coordinate=user_coordinates,
-                    favorites=favorites
+                    favorites=favorites,
+                    followers_count=followers_count,
+                    following_count=following_count
                         )
                 new_retweet.save()
+
+
+def source_property_scheduled_job():
+    consumer_key = settings.CONSUMER_KEY
+    consumer_secret = settings.CONSUMER_SECRET
+    access_token = settings.ACCESS_TOKEN
+    access_secret = settings.ACCESS_SECRET
+
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_secret)
+    api = tweepy.API(auth)
+
+    sources = Source.objects.filter(status='ACTIVE', type='TWITTER')
+
+    for active_source in sources:
+        if active_source.username != '':
+            source = active_source
+            name = active_source.username
+            user = api.get_user(name)
+            followers_count = user.followers_count
+            following_count = user.friends_count
+            new_source_property = Source_Property(
+                            source=source,
+                            followers_count=followers_count,
+                            following_count=following_count,
+                        )
+            new_source_property.save()

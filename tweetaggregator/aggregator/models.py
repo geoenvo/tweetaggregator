@@ -29,6 +29,8 @@ verbose_userlocation = _('User Location')
 verbose_retweets = _('Retweets')
 verbose_favorites = _('Favorites')
 verbose_retweetid = _('Retweet ID')
+verbose_followers = _('Followers')
+verbose_following = _('Following')
 
 
 class Source(models.Model):
@@ -237,10 +239,13 @@ class Retweet(models.Model):
         null=True,
         verbose_name=verbose_usercoordinate
     )
-    retweets = models.IntegerField(
-        blank=True,
+    followers_count = models.BigIntegerField(
         default=0,
-        verbose_name=verbose_retweets
+        verbose_name=verbose_followers
+    )
+    following_count = models.BigIntegerField(
+        default=0,
+        verbose_name=verbose_following
     )
     favorites = models.IntegerField(
         blank=True,
@@ -254,3 +259,30 @@ class Retweet(models.Model):
 
     def __unicode__(self):
         return '[%s] - %s' % (self.user_screen_name, self.retweet_created)
+
+
+class Source_Property(models.Model):
+    source = models.ForeignKey(
+        Source,
+        related_name='sources',
+        verbose_name=verbose_source
+    )
+    created = models.DateTimeField(
+        default=timezone.now,
+        verbose_name=verbose_tweetcreated
+    )
+    followers_count = models.BigIntegerField(
+        default=0,
+        verbose_name=verbose_followers
+    )
+    following_count = models.BigIntegerField(
+        default=0,
+        verbose_name=verbose_following
+    )
+
+    class Meta:
+        ordering = ['pk']
+        get_latest_by = 'pk'
+
+    def __unicode__(self):
+        return '[%s] - %s' % (self.source, self.created)
