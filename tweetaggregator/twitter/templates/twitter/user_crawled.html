@@ -1,0 +1,51 @@
+<head>
+    <title> List of all crawled tweets from a user </title>
+</head>
+<body>
+    <h2> @{{ username }} </h2>
+    <table border="1" >
+        <tr>
+            <th> No. </th>
+            <th> Tweet </th>
+            <th> Created </th>
+            <th> Retweets </th>
+            <th> Favorites </th>
+            <th> Twitter Page </th>
+        </tr>
+        {% for no, item in User_Tweets %}
+        <tr>
+            <td> {{ no }}. </td>
+            <td> {{ item.tweet_text }} </td>
+            <td> {{ item.tweet_created }} </td>
+            <td> {{ item.retweets }} </td>
+            <td> {{ item.favorites }} </td>
+            <td> <a href="https://twitter.com/{{ item.user_screen_name }}/status/{{ item.tweet_id }}/" target="_blank"> view </a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

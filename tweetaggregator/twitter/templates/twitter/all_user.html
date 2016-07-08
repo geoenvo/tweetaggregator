@@ -1,0 +1,87 @@
+<head>
+    <title> List of all username in source </title>
+</head>
+<body>
+    <form name="twitter_table">
+        <table border="1" >
+            <tr>
+                <th> <input type="checkbox" onchange="check_all(this)"/> </th>
+                <th> @username </th>
+                <th> Crawled Tweets </th>
+                <th> Last Tweets </th>
+                <th> Retweets </th>
+                <th> Favorites </th>
+                <th> Twitter Profiles </th>
+            </tr>
+            {% for username, crawled_tweet, tweet_created, retweet, favorite, twitter_profile in all_data %}
+            <tr>
+                <td> <input type="checkbox" name="check_username" value="{{ username }}"/></td>
+                <td> <a href="/twitter/users/{{ username }}"> {{ username }} </a> </td>
+                <td> {{ crawled_tweet }} </td>
+                <td> {{ tweet_created }} </td>
+                <td> {{ retweet }} </td>
+                <td> {{ favorite }} </td>
+                <td> <a href="{{ twitter_profile }}" target="_blank"> view </a> </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <input type="submit" value="Show Charts" onclick="show_chart()"/>
+    </form>
+    <script>
+        function check_all(user) {
+             var checkboxes = document.getElementsByTagName('input');
+             if (user.checked) {
+                 for (var i = 0; i < checkboxes.length; i++) {
+                     checkboxes[i].checked = true;
+                 }
+             } else {
+                 for (var i = 0; i < checkboxes.length; i++) {
+                     checkboxes[i].checked = false;
+                 }
+             }
+         }
+
+        function show_chart() {
+            var check_box = document.forms[0].check_username;
+            var checked_username = []
+            var n;
+            for (n = 0; n < check_box.length; n++) {
+                if (check_box[n].checked){
+                    checked_username.push(check_box[n].value);
+                }
+            }
+            if (checked_username.length < 1){
+                window.reload();
+            }
+            else {
+                window.open("/charts/tweet/" + checked_username);
+            }
+        }
+
+    </script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

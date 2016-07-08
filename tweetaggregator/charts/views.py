@@ -1,9 +1,8 @@
-import datetime
-
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response
 from aggregator.models import *
+import datetime
 import calendar
-import numpy as np
+
 
 
 def tweet_charts(request, users):
@@ -13,122 +12,95 @@ def tweet_charts(request, users):
     # Check if username actually exists in Source
     valid_usernames = []
     for username in usernames:
-        # ORM query: https://docs.djangoproject.com/en/1.9/ref/models/querysets/
         if Source.objects.filter(username=username).exists():
             valid_usernames.append(username)
-    print valid_usernames
-    # Get username's tweet count per month so far this year
+    valid_usernames = set(valid_usernames)
+
     now = datetime.datetime.now()
     current_year = now.year
     current_month = now.month
-    print current_year, current_month
+    tags = Twitter.tags_tweet.values()
     user_tweets = {}
+    user_keywords = {}
+    user_tags = {}
     for valid_username in valid_usernames:
         user_tweets[valid_username] = []
+        user_keywords[valid_username] = []
+        user_tags[valid_username] = []
+        keywords = Keyword.objects.filter(source=Source.objects.filter(username=valid_username))
+        # Get username's tweet count per month so far this year
         for month in range(1, current_month + 1):
             tweet_month_count = Twitter.objects.filter(user_screen_name=valid_username, tweet_created__year=current_year, tweet_created__month=month).count()
-            user_tweets[valid_username].append([month, tweet_month_count])
-    print user_tweets
-    context = {
-        'user_tweets': user_tweets
-    }
-    return render(request, 'charts/tweet_charts.html', context)
-
-
-def index(request, user):
-    T = Twitter.objects.all()
-    user = user.split(',')
-    user = filter(None, user)
-    user_index = 0
-    user_list = []
-    for item in T:
-        user_list.append(item.user_screen_name)
-    for item in user:
-        if item not in user_list:
-            user.remove(item)
-    xdata = np.empty([len(user), 3, 0], dtype='float64')
-    xdata = xdata.tolist()
-    ydata = np.empty([len(user), 3, 0], dtype='float64')
-    ydata = ydata.tolist()
-    extra_serie = {}
-    chartdata_list = []
-    chartcontainer_list = []
-    charttype_list = []
-
-    # Iterate Username
-    for username in user:
-        date = []
-        tweet_keyword = []
-        tags_keyword = []
-        for item in T:
-            if item.user_screen_name == username:
-                date.append(item.tweet_created.month)
-                tweet_keyword.append(item.keyword.keyword)
-                tags_keyword.append(item.tags_tweet.all())
-                pass
-
-        first_crwl = min(date)
-        last_crwl = max(date)
-        month_no = range(first_crwl, last_crwl + 1)
-        keyword_list = sorted(set(tweet_keyword))
-        uniq_tags = [i for sublist in tags_keyword for i in sublist]
-        tags_list = sorted(set(uniq_tags))
-        # Chart Type 0
-        for item in month_no:
-            xdata[user_index][0].append(calendar.month_name[item])
-            ydata[user_index][0].append(date.count(item))
-        # Chart Type 1
-        n = 0
-        for i in tags_list:
-            for j in tags_keyword:
-                if i in j:
-                    n += 1
-            xdata[user_index][1].append(str(i))
-            ydata[user_index][1].append(n)
-            n = 0
-        u = 0
-        for i in tags_keyword:
-            if not i:
-                u += 1
-        if u > 0:
-            xdata[user_index][1].append("empty tag")
-            ydata[user_index][1].append(u)
-        # Chart Type 2
-        for item in keyword_list:
-            xdata[user_index][2].append(item)
-            ydata[user_index][2].append(tweet_keyword.count(item))
-        # Next Username
-        user_index += 1
-
-    # Embed to Data
+            user_tweets[valid_username].append([calendar.month_name[month], tweet_month_count])
+        # Get username's tweet count per username's registered keywords
+        for keyword in keywords:
+            keyword_count = Twitter.objects.filter(user_screen_name=valid_username, keyword=keyword.id).count()
+            user_keywords[valid_username].append([keyword.keyword, keyword_count])
+        # Get username's tweet tags count and username's empty tags count
+        for tag in tags:
+            tag_count = Twitter.objects.filter(user_screen_name=valid_username, tags_tweet=tag['id']).count()
+            if tag_count != 0:
+                user_tags[valid_username].append([tag['name'],tag_count])
+        emptytag_count =  Twitter.objects.filter(user_screen_name=valid_username, tags_tweet=None).count()
+        user_tags[valid_username].append(['empty_tag',emptytag_count])
+        
+    # Convert to charts data format ([Chart_Type][Valid_Username])
     data = {
-            'extra': {
-                'x_is_date': False,
-                'x_axis_format': '',
-                'tag_script_js': True,
-                'jquery_on_ready': True,
+        'valid_usernames': valid_usernames,
+        'charttype_Bar': 'multiBarChart',
+        'charttype_Pie': 'pieChart',
+        'extra': {
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': True,
         }
     }
-    chartdata = np.empty([len(user) * 3, 3], dtype='S100')
-    chartdata = chartdata.tolist()
-    for i in range(len(user)):
-        for j in range(3):
-            chartdata[i][j] = {'x': xdata[i][j], 'name': 'tweets', 'y': ydata[i][j], 'extra': extra_serie}
-            chartdata_list.append(chartdata[i][j])
-            if j % 2 == 0:
-                charttype_list.append("multiBarChart")
-            else:
-                charttype_list.append("pieChart")
-
-    data.update({'chartdata': chartdata_list})
-
-    chartcontainer = np.empty([len(user) * 3, 3], dtype='S100')
-    chartcontainer = chartcontainer.tolist()
-    for i in range(len(user)):
-        for j in range(3):
-            chartcontainer[i][j] = 'username'+str(i)+'_type'+str(j)
-            chartcontainer_list.append(chartcontainer[i][j])
-    data.update({'chartcontainer': chartcontainer_list})
-
-    data.update({'zipped_data': zip(charttype_list, chartdata_list, chartcontainer_list)})
+    extra_serie = {}
+    xdata = [[],[],[]]
+    ydata = [[],[],[]]
+    for valid_username in valid_usernames:
+        x = [[],[],[]]
+        y = [[],[],[]]
+        for n in range(len(user_tweets[valid_username])):
+            x[0].append(user_tweets[valid_username][n][0])
+            y[0].append(user_tweets[valid_username][n][1])
+        for n in range(len(user_keywords[valid_username])):
+            x[1].append(user_keywords[valid_username][n][0])
+            y[1].append(user_keywords[valid_username][n][1])
+        for n in range(len(user_tags[valid_username])):
+            x[2].append(user_tags[valid_username][n][0])
+            y[2].append(user_tags[valid_username][n][1])
+        xdata[0].append(x[0])
+        ydata[0].append(y[0])
+        xdata[1].append(x[1])
+        ydata[1].append(y[1])
+        xdata[2].append(x[2])
+        ydata[2].append(y[2])
+    chartdata_list = [[],[],[]]
+    chartcontainer_list = [[],[],[]]
+    user = []
+    for n, valid_username in zip(range(len(valid_usernames)),valid_usernames):
+        chartdata_0 = {'x': xdata[0][n], 'y': ydata[0][n], 'extra': extra_serie}
+        chartdata_1 = {'x': xdata[1][n], 'y': ydata[1][n], 'extra': extra_serie}
+        chartdata_2 = {'x': xdata[2][n], 'y': ydata[2][n], 'extra': extra_serie}
+        chartcontainer_0 = 'username' + str(n) + '_type0'
+        chartcontainer_1 = 'username' + str(n) + '_type1'
+        chartcontainer_2 = 'username' + str(n) + '_type2'
+        chartdata_list[0].append(chartdata_0)
+        chartdata_list[1].append(chartdata_1)
+        chartdata_list[2].append(chartdata_2)
+        chartcontainer_list[0].append(chartcontainer_0)
+        chartcontainer_list[1].append(chartcontainer_1)
+        chartcontainer_list[2].append(chartcontainer_2)
+        user.append(valid_username)
+    data.update({'type0': zip(user, chartdata_list[0], chartcontainer_list[0])})
+    data.update({'type1': zip(user, chartdata_list[1], chartcontainer_list[1])})
+    data.update({'type2': zip(user, chartdata_list[2], chartcontainer_list[2])})
     return render_to_response('charts/index.html', data)
+
+
+
+
+
+

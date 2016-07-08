@@ -8,21 +8,73 @@
 <script type="text/javascript" src='{% static 'jquery/dist/jquery.js' %}'></script>
 <script type="text/javascript" src='{% static 'jquery/dist/jquery.min.js' %}'></script>
 
+<!-- Bootstrap -->
+
 {% load nvd3_tags %}
 <head>
     {% include_chart_jscss %}
-    {% for type, chart, container in zipped_data %}
-        {% load_chart type chart container extra %}
+    {% for user, chartdata, chartcontainer in type0 %}
+        {% load_chart charttype_Bar chartdata chartcontainer extra %}
     {% endfor %}
-
+    {% for user, chartdata, chartcontainer in type1 %}
+        {% load_chart charttype_Bar chartdata chartcontainer extra %}
+    {% endfor %}
+	{% for user, chartdata, chartcontainer in type2 %}
+        {% load_chart charttype_Pie chartdata chartcontainer extra %}
+    {% endfor %}
 </head>
 <body>
-    {% for type, chart, container in zipped_data %}
-        {% if type == 'multiBarChart' %}
-            {% include_container container 300 600 %}
-        {% else %}
-            {% include_container container %}
-        {% endif %}
-    {% endfor %}
-
+    <table>
+        {% for valid_username in valid_usernames %}
+        <tr>
+                <td> <strong> {{ valid_username }} </strong> </td>
+            {% for user, chartdata, chartcontainer in type0 %}
+                {% if user == valid_username %}
+                <td>
+                    {% include_container chartcontainer 350 600 %}
+                </td>
+                {% endif %}
+            {% endfor %}
+            {% for user, chartdata, chartcontainer in type1 %}
+                {% if user == valid_username %}
+                <td>
+                    {% include_container chartcontainer 350 600 %}
+                </td>
+                {% endif%}
+            {% endfor %}
+			{% for user, chartdata, chartcontainer in type2 %}
+                {% if user == valid_username %}
+                <td>
+                    {% include_container chartcontainer %}
+                </td>
+                {% endif%}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
 </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
