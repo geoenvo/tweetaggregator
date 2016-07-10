@@ -2,31 +2,44 @@
     <title> List of all username in source </title>
 </head>
 <body>
-    <form name="twitter_table">
-        <table border="1" >
-            <tr>
-                <th> <input type="checkbox" onchange="check_all(this)"/> </th>
-                <th> @username </th>
-                <th> Crawled Tweets </th>
-                <th> Last Tweets </th>
-                <th> Retweets </th>
-                <th> Favorites </th>
-                <th> Twitter Profiles </th>
-            </tr>
-            {% for username, crawled_tweet, tweet_created, retweet, favorite, twitter_profile in all_data %}
-            <tr>
-                <td> <input type="checkbox" name="check_username" value="{{ username }}"/></td>
-                <td> <a href="/twitter/users/{{ username }}"> {{ username }} </a> </td>
-                <td> {{ crawled_tweet }} </td>
-                <td> {{ tweet_created }} </td>
-                <td> {{ retweet }} </td>
-                <td> {{ favorite }} </td>
-                <td> <a href="{{ twitter_profile }}" target="_blank"> view </a> </td>
-            </tr>
-            {% endfor %}
-        </table>
-        <input type="submit" value="Show Charts" onclick="show_chart()"/>
-    </form>
+    <div id="table">
+        <form name="twitter_table">
+            <table border="1">
+                <tr>
+                    <th> <input type="checkbox" onchange="check_all(this)"/> </th>
+                    <th> @username </th>
+                    <th> Crawled Tweets </th>
+                    <th> Last Tweets </th>
+                    <th> Retweets </th>
+                    <th> Favorites </th>
+                    <th> Twitter Profiles </th>
+                </tr>
+                {% for username, crawled_tweet, tweet_created, retweet, favorite, twitter_profile in all_users %}
+                <tr>
+                    <td> <input type="checkbox" name="check_username" value="{{ username }}"/></td>
+                    <td> <a href="{% url 'all_crawled_user' username %}" target="_blank"> {{ username }} </a> </td>
+                    <td> {{ crawled_tweet }} </td>
+                    <td> {{ tweet_created }} </td>
+                    <td> {{ retweet }} </td>
+                    <td> {{ favorite }} </td>
+                    <td> <a href="{{ twitter_profile }}" target="_blank"> view </a> </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <input type="submit" value="Show Charts" onclick="show_chart()"/>
+        </form>
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if all_users.has_previous %}
+                <a href="?page={{ all_users.previous_page_number }}"> previous </a>
+            {% endif %}
+            <span class="current"> {{ all_data.number }} </span>
+            {% if all_users.has_next %}
+                <a href="?page={{ all_users.next_page_number }}"> next </a>
+            {% endif %}
+        </span>
+    </div>
     <script>
         function check_all(user) {
              var checkboxes = document.getElementsByTagName('input');
@@ -40,7 +53,6 @@
                  }
              }
          }
-
         function show_chart() {
             var check_box = document.forms[0].check_username;
             var checked_username = []
@@ -57,7 +69,6 @@
                 window.open("/charts/tweet/" + checked_username);
             }
         }
-
     </script>
 </body>
 
