@@ -98,7 +98,7 @@ class Source(models.Model):
         get_latest_by = 'pk'
 
     def __unicode__(self):
-        return '[%s] - %s' % (self.name, self.status)
+        return '[%s] - %s - %s' % (self.name, self.username, self.status)
 
 
 class Keyword(models.Model):
