@@ -45,12 +45,22 @@ def all_crawled_user(request, user):
         User_Tweets = zip(range(len(Twitter.objects.filter(user_screen_name=user)) + 1)[1:], Twitter.objects.filter(user_screen_name=user))
         all_user_tweets = paginator_page(request, User_Tweets)
         context = {
-            'all_user_Tweets': all_user_tweets,
+            'all_user_tweets': all_user_tweets,
             'username': user,
         }
     else :
         context = {}
     return render_to_response('twitter/user_crawled.html', context)
+
+def all_users_retweets(request, tweet):
+    tweet_origin = Twitter.objects.filter(tweet_id=tweet)[0]
+    retweet_user = zip(range(len(Retweet.objects.filter(tweet_id=tweet_origin)) + 1)[1:], Retweet.objects.filter(tweet_id=tweet_origin))
+    all_retweet_user = paginator_page(request, retweet_user)
+    context = {
+        'tweet_origin':tweet_origin,
+        'all_retweet_user':all_retweet_user,
+        }
+    return render_to_response('twitter/user_retweets.html', context)
 
 def all_crawled_tweets(request):
     # Get all crawled tweets

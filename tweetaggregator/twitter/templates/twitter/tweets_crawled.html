@@ -1,9 +1,10 @@
-<head>
-    <title> List of all crawled tweets </title>
-</head>
-<body>
-    <div id="table">
-        <table border="1" >
+{% extends "base.html" %}
+
+{% block title %}List of all crawled tweets{% endblock %}
+
+{% block content %}
+    <div id="table" class="table-responsive">
+        <table class="table table-bordered table-striped" >
             <tr>
                 <th> No. </th>
                 <th> @username </th>
@@ -18,7 +19,7 @@
                 <td> <a href="{% url 'all_crawled_user' item.user_screen_name %}" target="_blank"> {{ item.user_screen_name }} </a> </td>
                 <td> {{ item.tweet_text }} </td>
                 <td> {{ item.tweet_created }} </td>
-                <td> {{ item.retweets }} </td>
+                <td> <a href="{% url 'all_users_retweets' item.tweet_id %}" style="text-decoration: none" target="_blank"> {{ item.retweets }} </a> </td>
                 <td> {{ item.favorites }} </td>
             </tr>
             {% endfor %}
@@ -35,7 +36,7 @@
             {% endif %}
         </span>
     </div>
-</body>
+{% endblock %}
 
 
 

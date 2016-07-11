@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+    <title>{% block title %} socmed {% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta charset="UTF-8">
+	
+	{% load staticfiles %}
+	<!-- Jquery -->
+	<script type="text/javascript" src='{% static 'jquery/dist/jquery.js' %}'> </script>
+	<script type="text/javascript" src='{% static 'jquery/dist/jquery.min.js' %}'> </script>
+
+	<!-- Bootstrap -->
+	<link media="all" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" type="text/css" rel="stylesheet" />
+	<link media="all" href="{% static 'bootstrap/dist/css/bootstrap-theme.min.css' %}" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src='{% static 'bootstrap/dist/js/bootstrap.min.js' %}'></script>
+	
+	{% block extra_css %}{% endblock extra_css %}
+	{% block extra_js %}{% endblock extra_js %}
+	{% block extra_head %}{% endblock extra_head %}
+	
+	<!-- costum -->
+	<link media="all" href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" />
+
+</head>
+<body>
+	<div id="navbar">
+		{% block sidebar %}
+		<nav class="navbar navbar-default navbar-fixed-top">
+		  <div class="container-fluid">
+			<div class="navbar-header">
+			  <a class="navbar-brand" href="{% url 'home' %}">Socmed</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+			  <ul class="nav navbar-nav">
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Twitter <span class="caret"></span></a>
+				  <ul class="dropdown-menu">
+					<li><a href="{% url 'all_user' %}"> Users </a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'all_crawled_tweets' %}"> Tweets </a></li>
+				  </ul>
+				</li>
+			  </ul>
+			</div>
+		  </div>
+		</nav>
+		{% endblock %}
+	</div>
+
+    <div id="content" class="container-fluid">	  
+	  {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

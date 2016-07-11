@@ -1,18 +1,18 @@
-{% load staticfiles %}
+{% extends "base.html" %}
+{% load staticfiles nvd3_tags %}
+
 <!-- nvd3 -->
+{% block extra_css %}
 <link media="all" href="{% static 'nvd3/build/nv.d3.css' %}" type="text/css" rel="stylesheet" />
+{% endblock extra_css %}
+
+{% block extra_js %}
 <script type="text/javascript" src='{% static 'd3/d3.min.js' %}'></script>
 <script type="text/javascript" src='{% static 'nvd3/build/nv.d3.min.js' %}'></script>
+{% endblock extra_js %}
 
-<!-- jquery -->
-<script type="text/javascript" src='{% static 'jquery/dist/jquery.js' %}'></script>
-<script type="text/javascript" src='{% static 'jquery/dist/jquery.min.js' %}'></script>
-
-<!-- Bootstrap -->
-
-{% load nvd3_tags %}
-<head>
-    {% include_chart_jscss %}
+{% block extra_head %}
+	{% include_chart_jscss %}
     {% for user, chartdata, chartcontainer in type0 %}
         {% load_chart charttype_Bar chartdata chartcontainer extra %}
     {% endfor %}
@@ -22,8 +22,9 @@
 	{% for user, chartdata, chartcontainer in type2 %}
         {% load_chart charttype_Pie chartdata chartcontainer extra %}
     {% endfor %}
-</head>
-<body>
+{% endblock extra_head %}
+
+{% block content %}
     <table>
         {% for valid_username in valid_usernames %}
         <tr>
@@ -52,7 +53,8 @@
         </tr>
         {% endfor %}
     </table>
-</body>
+{% endblock %}	
+
 
 
 
