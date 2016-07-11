@@ -23,6 +23,7 @@ import taggit_autosuggest.urls
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^charts/', include('charts.urls')),
+    url(r'^twitter/', include('twitter.urls')),
     url(r'^taggit_suggest/', include('taggit_autosuggest.urls')),
 ]
 
