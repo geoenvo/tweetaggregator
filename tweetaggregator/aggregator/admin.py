@@ -100,7 +100,7 @@ class TwitterAdmin(admin.ModelAdmin):
     ordering = ['-tweet_created']
     date_hierarchy = 'tweet_created'
     list_filter = ['keyword', 'tweet_created', 'user_name']
-    search_fields = ['user_name', 'keyword', 'user_screen_name', 'tweet_text']
+    search_fields = ['user_name', 'user_screen_name', 'tweet_created', 'tweet_text']
 
     def tags(self, twitter):
         tags = []
@@ -139,7 +139,7 @@ class RetweetAdmin(admin.ModelAdmin):
     ordering = ['-retweet_created']
     date_hierarchy = 'retweet_created'
     list_filter = ['tweet_id', 'user_screen_name', 'retweet_created']
-    search_fields = ['user_name', 'user_screen_name', 'tweet_id', 'retweet_id', 'retweet_created']
+    search_fields = ['user_name', 'user_screen_name', 'retweet_id', 'retweet_created']
 
 
 class SourcePropertyAdmin(admin.ModelAdmin):
