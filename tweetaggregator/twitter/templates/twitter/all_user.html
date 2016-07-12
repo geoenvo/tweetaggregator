@@ -2,46 +2,8 @@
 
 {% block title %}List of all username in source{% endblock %}
 
-{% block content %}
-	<div id="table" class="table-responsive">
-		<form name="twitter_table">
-			<table class="table table-bordered table-striped">
-				<tr>
-					<th> <input type="checkbox" onchange="check_all(this)"/> </th>
-					<th> @username </th>
-					<th> Crawled Tweets </th>
-					<th> Last Tweets </th>
-					<th> Retweets </th>
-					<th> Favorites </th>
-					<th> Twitter Profiles </th>
-				</tr>
-				{% for username, crawled_tweet, tweet_created, retweet, favorite, twitter_profile in all_users %}
-				<tr>
-					<td> <input type="checkbox" name="check_username" value="{{ username }}"/></td>
-					<td> <a href="{% url 'all_crawled_user' username %}" target="_blank"> {{ username }} </a> </td>
-					<td> {{ crawled_tweet }} </td>
-					<td> {{ tweet_created }} </td>
-					<td> {{ retweet }} </td>
-					<td> {{ favorite }} </td>
-					<td> <a href="{{ twitter_profile }}" target="_blank"> view </a> </td>
-				</tr>
-				{% endfor %}
-			</table>
-			<input type="submit" class="btn btn-primary pull-left" value="Show Charts" onclick="show_chart()"/>
-		</form>
-	</div>
-	<div class="pagination" style="text-align:center">
-		<span class="step-links">
-			{% if all_users.has_previous %}
-				<a href="?page={{ all_users.previous_page_number }}"> previous </a>
-			{% endif %}
-			<span class="current"> {{ all_users.number }} </span>
-			{% if all_users.has_next %}
-				<a href="?page={{ all_users.next_page_number }}"> next </a>
-			{% endif %}
-		</span>
-	</div>
-    <script>
+{% block extra_js %}
+	<script>
         function check_all(user) {
              var checkboxes = document.getElementsByTagName('input');
              if (user.checked) {
@@ -71,6 +33,49 @@
             }
         }
     </script>
+{% endblock extra_js %}
+
+{% block content %}
+	<div class="table-responsive">
+		<form name="twitter_table">
+			<table class="table table-bordered table-striped">
+				<tr>
+					<th width="4%"> <input type="checkbox" onchange="check_all(this)"/> </th>
+					<th> @username </th>
+					<th width="12%"> Crawled Tweets </th>
+					<th width="32%"> Last Tweets </th>
+					<th width="6%"> Retweets </th>
+					<th width="6%"> Favorites </th>
+					<th> Twitter Profiles </th>
+				</tr>
+				{% for username, crawled_tweet, tweet_created, retweet, favorite, twitter_profile in all_users %}
+				<tr>
+					<td width="4%"> <input type="checkbox" name="check_username" value="{{ username }}"/></td>
+					<td> <a href="{% url 'all_crawled_user' username %}" target="_blank"> {{ username }} </a> </td>
+					<td width="12%"> {{ crawled_tweet }} </td>
+					<td width="32%"> {{ tweet_created }} </td>
+					<td width="6%"> {{ retweet }} </td>
+					<td width="6%"> {{ favorite }} </td>
+					<td> <a href="{{ twitter_profile }}" target="_blank"> view </a> </td>
+				</tr>
+				{% endfor %}
+			</table>
+			<input type="submit" class="btn btn-primary pull-left" value="Show Charts" onclick="show_chart()"/>
+		</form>
+	</div>
+	<div class=text-center>
+		<div class="pagination">
+			<span class="step-links">
+				{% if all_users.has_previous %}
+					<a href="?page={{ all_users.previous_page_number }}"> previous </a>
+				{% endif %}
+				<span class="current"> {{ all_users.number }} </span>
+				{% if all_users.has_next %}
+					<a href="?page={{ all_users.next_page_number }}"> next </a>
+				{% endif %}
+			</span>
+		</div>
+	</div>
 {% endblock %}
 
 

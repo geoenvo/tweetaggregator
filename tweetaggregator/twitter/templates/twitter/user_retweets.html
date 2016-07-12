@@ -4,46 +4,48 @@
 
 {% block content %}
 	<div id="origin-list">
-        <ul style="list-style-type: none"; class="text-left">
+        <ul class="text-left">
             <li> <strong> Original tweets : </strong> {{ tweet_origin.tweet_text }} </li>
             <li> <strong> Username : </strong> @{{ tweet_origin.user_screen_name }} </li>
             <li> <strong> Created : </strong> {{ tweet_origin.tweet_created }} </li>
             <li> <Strong> Retweets : </strong> {{ tweet_origin.retweets }} </li>
         </ul>
 	</div>	
-    <div id="table">
+    <div class="table-responsive">
         <table class="table table-bordered table-striped" >
             <tr>
-                <th> No. </th>
-                <th> @username </th>
-                <th> Created </th>
-                <th> Followers </th>
-                <th> Following </th>
+                <th width="3%"> No. </th>
+                <th width="24%"> @username </th>
+                <th width="24%"> Created </th>
+                <th width="12%"> Followers </th>
+                <th width="12%"> Following </th>
                 <th> Twitter Profile </th>
             </tr>
             {% for no, item in all_retweet_user %}
             <tr>
-                <td> {{ no }}. </td>
-                <td> {{ item.user_screen_name }} </td>
-                <td> {{ item.retweet_created }} </td>
-                <td> {{ item.followers_count }} </td>
-                <td> {{ item.following_count }} </td>
+                <td width="3%"> {{ no }}. </td>
+                <td width="24%"> {{ item.user_screen_name }} </td>
+                <td width="24%"> {{ item.retweet_created }} </td>
+                <td width="12%"> {{ item.followers_count }} </td>
+                <td width="12%"> {{ item.following_count }} </td>
                 <td> <a href="https://twitter.com/{{ item.user_screen_name }}" target="_blank"> view </a> </td>
             </tr>
             {% endfor %}
         </table>
     </div>
-    <div id ="paginator" class="pagination">
-        <span class="step-links">
-            {% if all_retweet_user.has_previous %}
-                <a href="?page={{ all_retweet_user.previous_page_number }}"> previous </a>
-            {% endif %}
-            <span class="current"> {{ all_retweet_user.number }} </span>
-            {% if all_retweet_user.has_next %}
-                <a href="?page={{ all_retweet_user.next_page_number }}"> next </a>
-            {% endif %}
-        </span>
-    </div>
+	<div class=text-center>
+		<div class="pagination">
+			<span class="step-links">
+				{% if all_retweet_user.has_previous %}
+					<a href="?page={{ all_retweet_user.previous_page_number }}"> previous </a>
+				{% endif %}
+				<span class="current"> {{ all_retweet_user.number }} </span>
+				{% if all_retweet_user.has_next %}
+					<a href="?page={{ all_retweet_user.next_page_number }}"> next </a>
+				{% endif %}
+			</span>
+		</div>
+	</div>	
 {% endblock %}
 
 

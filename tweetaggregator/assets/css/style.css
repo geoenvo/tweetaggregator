@@ -2,3 +2,18 @@ body {
   min-height: 2000px;
   padding-top: 70px;
 }
+
+table {
+	max-width:none; 
+	table-layout:fixed; 
+	word-wrap:break-word;
+}
+
+a {
+	text-decoration: none;
+}
+
+ul {
+	list-style-type: none;
+}
+

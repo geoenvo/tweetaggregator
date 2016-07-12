@@ -3,39 +3,41 @@
 {% block title %}List of all crawled tweets{% endblock %}
 
 {% block content %}
-    <div id="table" class="table-responsive">
+    <div class="table-responsive">
         <table class="table table-bordered table-striped" >
             <tr>
-                <th> No. </th>
-                <th> @username </th>
-                <th> Tweet </th>
-                <th> Created </th>
-                <th> Retweets </th>
-                <th> Favorites </th>
+                <th width="4%"> No. </th>
+                <th width="12%"> @username </th>
+                <th width="36%"> Tweet </th>
+                <th width="12%"> Created </th>
+                <th width="4%"> Retweets </th>
+                <th width="4%"> Favorites </th>
             </tr>
             {% for no, item in all_tweets %}
             <tr>
-                <td> {{ no }}. </td>
-                <td> <a href="{% url 'all_crawled_user' item.user_screen_name %}" target="_blank"> {{ item.user_screen_name }} </a> </td>
-                <td> {{ item.tweet_text }} </td>
-                <td> {{ item.tweet_created }} </td>
-                <td> <a href="{% url 'all_users_retweets' item.tweet_id %}" style="text-decoration: none" target="_blank"> {{ item.retweets }} </a> </td>
-                <td> {{ item.favorites }} </td>
+                <td width="4%"> {{ no }}. </td>
+                <td width="12%"> <a href="{% url 'all_crawled_user' item.user_screen_name %}" target="_blank"> {{ item.user_screen_name }} </a> </td>
+                <td width="36%"> {{ item.tweet_text }} </td>
+                <td width="12%"> {{ item.tweet_created }} </td>
+                <td width="4%"> <a href="{% url 'all_users_retweets' item.tweet_id %}" target="_blank"> {{ item.retweets }} </a> </td>
+                <td width="4%"> {{ item.favorites }} </td>
             </tr>
             {% endfor %}
         </table>
     </div>
-    <div class="pagination">
-        <span class="step-links">
-            {% if all_tweets.has_previous %}
-                <a href="?page={{ all_tweets.previous_page_number }}"> previous </a>
-            {% endif %}
-            <span class="current"> {{ all_tweets.number }} </span>
-            {% if all_tweets.has_next %}
-                <a href="?page={{ all_tweets.next_page_number }}"> next </a>
-            {% endif %}
-        </span>
-    </div>
+	<div class="text-center">
+		<div class="pagination">
+			<span class="step-links">
+				{% if all_tweets.has_previous %}
+					<a href="?page={{ all_tweets.previous_page_number }}"> previous </a>
+				{% endif %}
+				<span class="current"> {{ all_tweets.number }} </span>
+				{% if all_tweets.has_next %}
+					<a href="?page={{ all_tweets.next_page_number }}"> next </a>
+				{% endif %}
+			</span>
+		</div>
+	</div>	
 {% endblock %}
 
 
