@@ -42,8 +42,8 @@
 				{% endif %}
 				<span class="current"> {{ all_retweet_user.number }} </span>
 				{% if all_retweet_user.has_next %}
-					<a href="?page={{ all_retweet_user.first_page_number }}"> First </a>
-					<a href="?page={{ all_retweet_user.previous_page_number }}"> Previous </a>
+					<a href="?page={{ all_retweet_user.next_page_number }}"> Next </a>
+					<a href="?page={{ all_retweet_user.paginator.num_pages}}"> Last </a>
 				{% endif %}
 			</span>
 		</div>
