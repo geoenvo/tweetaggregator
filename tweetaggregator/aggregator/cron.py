@@ -12,6 +12,9 @@ from .models import Source, Twitter, Retweet, Source_Property
 
 
 def tweet_scheduled_job():
+    """
+    Periodically crawl tweets for active sources.
+    """
     consumer_key = settings.CONSUMER_KEY
     consumer_secret = settings.CONSUMER_SECRET
     access_token = settings.ACCESS_TOKEN
@@ -292,6 +295,9 @@ def tweet_scheduled_job():
 
 
 def check_retweet_scheduled_job():
+    """
+    Get the retweet info of crawled tweets posted in the past week.
+    """
     consumer_key = settings.CONSUMER_KEY
     consumer_secret = settings.CONSUMER_SECRET
     access_token = settings.ACCESS_TOKEN
@@ -300,48 +306,53 @@ def check_retweet_scheduled_job():
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_secret)
     api = tweepy.API(auth)
+    
+    now = datetime.now()
+    last_week = now - timedelta(weeks=1)
 
-    sources = Twitter.objects.all()
-    for source in sources:
-        if source.retweets > 0:
-            tweet_id = source.tweet_id
-            tweetid = Twitter.objects.get(tweet_id=tweet_id)
-            retweets = api.retweets(str(tweet_id), count=100)
-            for a_retweet in retweets:
-                retweet_id = a_retweet.id_str
-                if Retweet.objects.filter(retweet_id=retweet_id):
-                    break
-                a_retweet_localcreatedtime = a_retweet.created_at + timedelta(hours=7)
-                retweet_created = a_retweet_localcreatedtime
-                user_id = a_retweet.user.id
-                user_name = a_retweet.user.name
-                user_screen_name = a_retweet.user.screen_name
-                user_URL = a_retweet.user.url
-                favorites = a_retweet.favorite_count
-                followers_count = a_retweet.user.followers_count
-                following_count = a_retweet.user.friends_count
-                user_utc_offset = a_retweet.user.utc_offset
-                user_coordinates = ''
-                if a_retweet.coordinates:
-                    user_coordinates = a_retweet.coordinates['coordinates']
-                new_retweet = Retweet(
-                    tweet_id=tweetid,
-                    retweet_id=retweet_id,
-                    retweet_created=retweet_created,
-                    user_id=user_id,
-                    user_name=user_name,
-                    user_URL=user_URL,
-                    user_screen_name=user_screen_name,
-                    user_utc_offset=user_utc_offset,
-                    user_coordinate=user_coordinates,
-                    favorites=favorites,
-                    followers_count=followers_count,
-                    following_count=following_count
-                        )
-                new_retweet.save()
+    # Only check tweets created in past week
+    tweets_with_rt = Twitter.objects.filter(tweet_created__gt=last_week)
+    for tweet_with_rt in tweets_with_rt:
+        tweet_id = tweet_with_rt.tweet_id
+        retweets = api.retweets(str(tweet_id), count=100)
+        for a_retweet in retweets:
+            retweet_id = a_retweet.id_str
+            if Retweet.objects.filter(retweet_id=retweet_id):
+                continue
+            a_retweet_localcreatedtime = a_retweet.created_at + timedelta(hours=7)
+            retweet_created = a_retweet_localcreatedtime
+            user_id = a_retweet.user.id
+            user_name = a_retweet.user.name
+            user_screen_name = a_retweet.user.screen_name
+            user_URL = a_retweet.user.url
+            favorites = a_retweet.favorite_count
+            followers_count = a_retweet.user.followers_count
+            following_count = a_retweet.user.friends_count
+            user_utc_offset = a_retweet.user.utc_offset
+            user_coordinates = ''
+            if a_retweet.coordinates:
+                user_coordinates = a_retweet.coordinates['coordinates']
+            new_retweet = Retweet(
+                tweet_id=tweet_with_rt,
+                retweet_id=retweet_id,
+                retweet_created=retweet_created,
+                user_id=user_id,
+                user_name=user_name,
+                user_URL=user_URL,
+                user_screen_name=user_screen_name,
+                user_utc_offset=user_utc_offset,
+                user_coordinate=user_coordinates,
+                favorites=favorites,
+                followers_count=followers_count,
+                following_count=following_count
+            )
+            new_retweet.save()
 
 
 def source_property_scheduled_job():
+    """
+    Periodically keep track of every active source's follower and following count.
+    """
     consumer_key = settings.CONSUMER_KEY
     consumer_secret = settings.CONSUMER_SECRET
     access_token = settings.ACCESS_TOKEN

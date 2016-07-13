@@ -99,7 +99,7 @@ class TwitterAdmin(admin.ModelAdmin):
     ]
     ordering = ['-tweet_created']
     date_hierarchy = 'tweet_created'
-    list_filter = ['keyword', 'tweet_created', 'user_name']
+    list_filter = ['keyword', 'tweet_created', 'user_screen_name']
     search_fields = ['user_name', 'user_screen_name', 'tweet_created', 'tweet_text']
 
     def tags(self, twitter):
