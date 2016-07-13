@@ -28,26 +28,26 @@
     <table>
         {% for valid_username in valid_usernames %}
         <tr>
-                <td> <strong> {{ valid_username }} </strong> </td>
+            <td> <strong> {{ valid_username }} </strong> </td>
             {% for user, chartdata, chartcontainer in type0 %}
                 {% if user == valid_username %}
-                <td>
-                    {% include_container chartcontainer 350 600 %}
-                </td>
+            <td>
+                {% include_container chartcontainer 350 600 %}
+            </td>
                 {% endif %}
             {% endfor %}
             {% for user, chartdata, chartcontainer in type1 %}
                 {% if user == valid_username %}
-                <td>
-                    {% include_container chartcontainer 350 600 %}
-                </td>
+            <td>
+                {% include_container chartcontainer 350 600 %}
+            </td>
                 {% endif%}
             {% endfor %}
 			{% for user, chartdata, chartcontainer in type2 %}
                 {% if user == valid_username %}
-                <td>
-                    {% include_container chartcontainer %}
-                </td>
+            <td>
+                {% include_container chartcontainer %}
+            </td>
                 {% endif%}
             {% endfor %}
         </tr>

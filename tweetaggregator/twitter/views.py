@@ -42,8 +42,8 @@ def all_user(request):
 def all_crawled_user(request, user):
     # Check if username actually exists in Source
     if Source.objects.filter(username=user).exists():
-        User_Tweets = zip(range(len(Twitter.objects.filter(user_screen_name=user)) + 1)[1:], Twitter.objects.filter(user_screen_name=user))
-        all_user_tweets = paginator_page(request, User_Tweets)
+        user_tweets = zip(range(len(Twitter.objects.filter(user_screen_name=user)) + 1)[1:], Twitter.objects.filter(user_screen_name=user))
+        all_user_tweets = paginator_page(request, user_tweets)
         context = {
             'all_user_tweets': all_user_tweets,
             'username': user,

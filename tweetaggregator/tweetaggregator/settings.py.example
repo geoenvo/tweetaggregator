@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'taggit_autosuggest',
     'charts',
     'django_nvd3',
+    'twitter',
 ]
 
 MIDDLEWARE_CLASSES = [
