@@ -44,8 +44,8 @@
 					<th> @username </th>
 					<th width="12%"> Crawled Tweets </th>
 					<th width="32%"> Last Tweet </th>
-					<th width="6%"> Retweets </th>
-					<th width="6%"> Favorites </th>
+					<th width="10%"> Retweets </th>
+					<th width="10%"> Favorites </th>
 					<th> Twitter Profile </th>
 				</tr>
 				{% for username, crawled_tweet, tweet_created, retweet, favorite, twitter_profile in all_users %}
@@ -54,8 +54,8 @@
 					<td> <a href="{% url 'all_crawled_user' username %}"> {{ username }} </a> </td>
 					<td width="12%"> {{ crawled_tweet }} </td>
 					<td width="32%"> {{ tweet_created }} </td>
-					<td width="6%"> {{ retweet }} </td>
-					<td width="6%"> {{ favorite }} </td>
+					<td width="10%"> {{ retweet }} </td>
+					<td width="10%"> {{ favorite }} </td>
 					<td> <a href="{{ twitter_profile }}"> view </a> </td>
 				</tr>
 				{% endfor %}

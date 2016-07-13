@@ -4,7 +4,6 @@ import datetime
 import calendar
 
 
-
 def tweet_charts(request, users):
     usernames = users.split(',')
     usernames = filter(None, usernames)

@@ -41,18 +41,41 @@ def all_user(request):
 
 def all_crawled_user(request, user):
     # Check if username actually exists in Source
+    order = request.GET.get('order')
+    sort = request.GET.get('sort')
+    records = Twitter.objects.filter(user_screen_name=user)
+    if order is None:
+        order = "dsc"
+        sort = 'tweet_created'
+    if sort is not None:
+        paging_order = order
+        paging_sort = sort
+        records = records.order_by(sort)
+        if order == "dsc":
+            records = records.reverse()
+            order = "asc"
+        else:
+            order = "dsc"
+    else :
+        paging_order = order
+        paging_sort = sort
     if Source.objects.filter(username=user).exists():
-        user_tweets = zip(range(len(Twitter.objects.filter(user_screen_name=user)) + 1)[1:], Twitter.objects.filter(user_screen_name=user))
+        user_tweets = zip(range(len(Twitter.objects.filter(user_screen_name=user)) + 1)[1:], records)
         all_user_tweets = paginator_page(request, user_tweets)
         context = {
             'all_user_tweets': all_user_tweets,
             'username': user,
+            'order': order,
+            'sort': sort,
+            'paging_order': paging_order,
+            'paging_sort': paging_sort,
         }
     else :
         context = {}
     return render_to_response('twitter/user_crawled.html', context)
 
 def all_users_retweets(request, tweet):
+    # Get all retweet's users
     tweet_origin = Twitter.objects.filter(tweet_id=tweet)[0]
     retweet_user = zip(range(len(Retweet.objects.filter(tweet_id=tweet_origin)) + 1)[1:], Retweet.objects.filter(tweet_id=tweet_origin))
     all_retweet_user = paginator_page(request, retweet_user)
@@ -64,9 +87,33 @@ def all_users_retweets(request, tweet):
 
 def all_crawled_tweets(request):
     # Get all crawled tweets
-    Tweets = zip(range(len(Twitter.objects.all()) + 1)[1:], Twitter.objects.all())
+    order = request.GET.get('order')
+    sort = request.GET.get('sort')
+    records = Twitter.objects.all()
+    if order is None:
+        order = "dsc"
+        sort = 'tweet_created'
+    if sort is not None:
+        paging_order = order
+        paging_sort = sort
+        records = records.order_by(sort)
+        if order == "dsc":
+            records = records.reverse()
+            order = "asc"
+        else:
+            order = "dsc"
+    else:
+        paging_order = order
+        paging_sort = sort
+    Tweets = zip(range(len(Twitter.objects.all()) + 1)[1:], records)
     all_tweets = paginator_page(request, Tweets)
-    context = {'all_tweets': all_tweets}
+    context = {
+            'all_tweets': all_tweets,
+            'order': order,
+            'sort': sort,
+            'paging_order': paging_order,
+            'paging_sort': paging_sort,
+        }
     return render_to_response('twitter/tweets_crawled.html', context)
 
 
