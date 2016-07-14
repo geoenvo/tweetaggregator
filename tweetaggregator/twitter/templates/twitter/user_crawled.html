@@ -12,25 +12,25 @@
                 <th width="10%"> 
 					<a href="?&sort=tweet_created&order={{ order }}"> Created </a> 
 					{% if order == 'asc' and sort == 'tweet_created' %}
-						<span class="glyphicon glyphicon-triangle-top pull-right" aria-hidden="true"></span>
-					{% elif order == 'dsc' and sort == 'tweet_created' %}
 						<span class="glyphicon glyphicon-triangle-bottom pull-right" aria-hidden="true"></span>
+					{% elif order == 'dsc' and sort == 'tweet_created' %}
+						<span class="glyphicon glyphicon-triangle-top pull-right" aria-hidden="true"></span>
 					{% endif %}
 				</th>
                 <th width="8%"> 
 					<a href="?sort=retweets&order={{ order }}"> Retweets </a> 
 					{% if order == 'asc' and sort == 'retweets' %}
-						<span class="glyphicon glyphicon-triangle-top pull-right" aria-hidden="true"></span>
-					{% elif order == 'dsc' and sort == 'retweets' %}
 						<span class="glyphicon glyphicon-triangle-bottom pull-right" aria-hidden="true"></span>
+					{% elif order == 'dsc' and sort == 'retweets' %}
+						<span class="glyphicon glyphicon-triangle-top pull-right" aria-hidden="true"></span>
 					{% endif %}
 				</th>
                 <th width="8%"> 
 					<a href="?sort=favorites&order={{ order }}"> Favorites </a> 
 					{% if order == 'asc' and sort == 'favorites' %}
-						<span class="glyphicon glyphicon-triangle-top pull-right" aria-hidden="true"></span>
-					{% elif order == 'dsc' and sort == 'favorites' %}
 						<span class="glyphicon glyphicon-triangle-bottom pull-right" aria-hidden="true"></span>
+					{% elif order == 'dsc' and sort == 'favorites' %}
+						<span class="glyphicon glyphicon-triangle-top pull-right" aria-hidden="true"></span>
 					{% endif %}
 				</th>
                 <th width="12%"> Twitter Page </th>

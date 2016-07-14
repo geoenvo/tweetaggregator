@@ -3,6 +3,19 @@ body {
   padding-top: 70px;
 }
 
+@media(max-width:767px){
+	td, th {
+		max-width: 100px;
+		overflow: hidden;
+
+		white-space: nowrap;
+	}
+}
+
+ul {
+	padding: 0;
+}
+
 a:hover {
 	text-decoration: none;
 }
@@ -16,15 +29,6 @@ table {
 	table-layout:fixed; 
 	word-wrap:break-word;
 	margin: 15px auto;
-}
-
-@media(max-width:767px){
-	td, th {
-		max-width: 100px;
-		overflow: hidden;
-		
-		white-space: nowrap;
-	}
 }
 
 td {

@@ -17,8 +17,22 @@
                 <th width="3%"> No. </th>
                 <th width="24%"> @username </th>
                 <th width="24%"> Created </th>
-                <th width="12%"> Followers </th>
-                <th width="12%"> Following </th>
+                <th width="12%">
+                    <a href="?&sort=followers_count&order={{ order }}"> Followers </a>
+                    {% if order == 'asc' and sort == 'followers_count' %}
+                        <span class="glyphicon glyphicon-triangle-bottom pull-right" aria-hidden="true"></span>
+                    {% elif order == 'dsc' and sort == 'followers_count' %}
+                        <span class="glyphicon glyphicon-triangle-top pull-right" aria-hidden="true"></span>
+                    {% endif %}
+                </th>
+                <th width="12%">
+                <a href="?&sort=following_count&order={{ order }}"> Following </a>
+                    {% if order == 'asc' and sort == 'following_count' %}
+                        <span class="glyphicon glyphicon-triangle-bottom pull-right" aria-hidden="true"></span>
+                    {% elif order == 'dsc' and sort == 'following_count' %}
+                        <span class="glyphicon glyphicon-triangle-top pull-right" aria-hidden="true"></span>
+                    {% endif %}
+                </th>
                 <th> Twitter Profile </th>
             </tr>
             {% for no, item in all_retweet_user %}
@@ -37,13 +51,13 @@
 		<div class="pagination">
 			<span class="step-links">
 				{% if all_retweet_user.has_previous %}
-					<a href="?page={{ all_retweet_user.first_page_number }}"> First </a>
-					<a href="?page={{ all_retweet_user.previous_page_number }}"> Previous </a>
+					<a href="?page={{ all_retweet_user.first_page_number }}&sort={{ paging_sort }}&order={{ paging_order }}"> First </a>
+					<a href="?page={{ all_retweet_user.previous_page_number }}&sort={{ paging_sort }}&order={{ paging_order }}"> Previous </a>
 				{% endif %}
 				<span class="current"> {{ all_retweet_user.number }} </span>
 				{% if all_retweet_user.has_next %}
-					<a href="?page={{ all_retweet_user.next_page_number }}"> Next </a>
-					<a href="?page={{ all_retweet_user.paginator.num_pages}}"> Last </a>
+					<a href="?page={{ all_retweet_user.next_page_number }}&sort={{ paging_sort }}&order={{ paging_order }}"> Next </a>
+					<a href="?page={{ all_retweet_user.paginator.num_pages}}&sort={{ paging_sort }}&order={{ paging_order }}"> Last </a>
 				{% endif %}
 			</span>
 		</div>
