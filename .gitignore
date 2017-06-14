@@ -9,4 +9,5 @@ tweetaggregator/static/*
 tweetaggregator/components/*
 tweetaggregator/uploaded/*
 tweetaggregator/tweetaggregator/settings.py
+tweetaggregator/tweetaggregator/production_settings.py
 node-v*

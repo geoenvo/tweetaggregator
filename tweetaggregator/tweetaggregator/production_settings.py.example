@@ -1,0 +1,26 @@
+# PRODUCTION SETTINGS
+
+DEBUG = False
+
+# If DEBUG is set False, set FORCE_SERVE_STATIC to True in order for dev server to serve static files
+FORCE_SERVE_STATIC = True
+
+# Use http://www.miniwebtool.com/django-secret-key-generator/ to generate new SECRET_KEY
+SECRET_KEY = '^f!)%uc(84c$1e7((u!)a@dmroh38kf%zmt2h%w@(l6w(xe+7='
+
+# Set the domain names or IP addresses that Django can be accessed by
+ALLOWED_HOSTS = ['192.168.1.200']
+
+# Define a custom admin endpoint other than /admin
+ADMIN_URL_PATTERN = r'^admintweet2017/'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'tweetaggregator',
+        'USER': 'tweetaggregator',
+        'PASSWORD': 'dbpassword',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
