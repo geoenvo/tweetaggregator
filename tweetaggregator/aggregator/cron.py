@@ -29,7 +29,7 @@ def tweet_scheduled_job():
     sources = Source.objects.filter(status='ACTIVE', type='TWITTER')
 
     for active_source in sources:
-#usingTWEEPY
+# using TWEEPY method
         if active_source.method == "TWEEPY":
             keywords = active_source.keywords.all()
             for a_keyword in keywords:
@@ -38,7 +38,7 @@ def tweet_scheduled_job():
                 for status in searched_tweets:
                     tweet_id = status.id_str
                     if Twitter.objects.filter(tweet_id=tweet_id):
-                        break
+                        continue
                     tweet_localcreatedtime = status.created_at + timedelta(hours=7)
                     diff = datetime.now() - tweet_localcreatedtime
                     diff_hours = diff.total_seconds() / 3600
@@ -73,9 +73,10 @@ def tweet_scheduled_job():
                             favorites=favorites
                         )
                         new_twitter.save()
-#usingGOT(GetOldTweets)
+
+# using GOT (Get Old Tweets library) method
         if active_source.method == "GOT":
-#usingGOT-by keywords
+            # using GOT - by keywords
             if (active_source.username == '' and active_source.since == None and active_source.until == None):
                 keywords = active_source.keywords.all()
                 for a_keyword in keywords:
@@ -85,7 +86,7 @@ def tweet_scheduled_job():
                     for status in searched_tweets:
                         tweet_id = status.id
                         if Twitter.objects.filter(tweet_id=tweet_id):
-                            break
+                            continue
                         tweet_createdtime = status.date
                         diff = datetime.now() - tweet_createdtime
                         diff_hours = diff.total_seconds() / 3600
@@ -110,7 +111,8 @@ def tweet_scheduled_job():
                                 favorites=favorites
                             )
                             new_twitter.save()
-#usingGOT-by username
+
+            # using GOT - by username
             if (active_source.username != '' and active_source.since == None and active_source.until == None):
                 keywords = active_source.keywords.all()
                 if not keywords:
@@ -120,7 +122,7 @@ def tweet_scheduled_job():
                     for status in searched_tweets:
                         tweet_id = status.id
                         if Twitter.objects.filter(tweet_id=tweet_id):
-                            break
+                            continue
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
                         tweet_id = status.id
@@ -141,7 +143,8 @@ def tweet_scheduled_job():
                             favorites=favorites
                         )
                         new_twitter.save()
-#usingGOT-by username&keyword
+
+            # using GOT - by username & keyword
             if (active_source.username != '' and active_source.since == None and active_source.until == None):
                 username = active_source.username
                 keywords = active_source.keywords.all()
@@ -152,7 +155,7 @@ def tweet_scheduled_job():
                     for status in searched_tweets:
                         tweet_id = status.id
                         if Twitter.objects.filter(tweet_id=tweet_id):
-                            break
+                            continue
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
                         tweet_created = status.date
@@ -173,7 +176,8 @@ def tweet_scheduled_job():
                             favorites=favorites
                         )
                         new_twitter.save()
-#usingGOT-by user&daterange
+
+            # using GOT - by username & date range
             if (active_source.username != '' and (active_source.since != None or active_source.until != None)):
                 keywords = active_source.keywords.all()
                 if not keywords:
@@ -192,7 +196,7 @@ def tweet_scheduled_job():
                     for status in searched_tweets:
                         tweet_id = status.id
                         if Twitter.objects.filter(tweet_id=tweet_id):
-                            break
+                            continue
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
                         tweet_created = status.date
@@ -212,7 +216,8 @@ def tweet_scheduled_job():
                             favorites=favorites
                         )
                         new_twitter.save()
-#usingGOT-by keyword&daterange
+
+            # using GOT - by keyword & date range
             if (active_source.username == '' and (active_source.since != None or active_source.until != None)):
                 keywords = active_source.keywords.all()
                 for a_keyword in keywords:
@@ -231,7 +236,7 @@ def tweet_scheduled_job():
                     for status in searched_tweets:
                         tweet_id = status.id
                         if Twitter.objects.filter(tweet_id=tweet_id):
-                            break
+                            continue
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
                         tweet_created = status.date
@@ -252,7 +257,8 @@ def tweet_scheduled_job():
                             favorites=favorites
                         )
                         new_twitter.save()
-#usingGOT-by daterange&keyword&username
+
+           # using GOT - by username & keyword & date range
             if (active_source.username != '' and (active_source.since != None or active_source.until != None)):
                 username = active_source.username
                 keywords = active_source.keywords.all()
@@ -272,7 +278,7 @@ def tweet_scheduled_job():
                     for status in searched_tweets:
                         tweet_id = status.id
                         if Twitter.objects.filter(tweet_id=tweet_id):
-                            break
+                            continue
                         tweet_text = status.text
                         tweet_text = "{}".format(smart_str(tweet_text))
                         tweet_created = status.date
@@ -373,8 +379,8 @@ def source_property_scheduled_job():
             followers_count = user.followers_count
             following_count = user.friends_count
             new_source_property = Source_Property(
-                            source=source,
-                            followers_count=followers_count,
-                            following_count=following_count,
-                        )
+                source=source,
+                followers_count=followers_count,
+                following_count=following_count,
+            )
             new_source_property.save()
