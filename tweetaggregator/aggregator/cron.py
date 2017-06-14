@@ -51,6 +51,7 @@ def tweet_scheduled_job():
                         user_screen_name = status.user.screen_name
                         user_URL = status.user.url
                         favorites = status.favorite_count
+                        retweets = 0
                         if hasattr(status, 'retweeted_status'):
                             retweets = status.retweet_count
                         user_utc_offset = status.user.utc_offset
