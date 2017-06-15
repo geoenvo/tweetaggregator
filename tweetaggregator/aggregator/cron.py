@@ -99,6 +99,7 @@ def tweet_scheduled_job():
                             user_location = status.geo
                             retweets = status.retweets
                             favorites = status.favorites
+                            url = status.permalink
                             new_twitter = Twitter(
                                 tweet_text=tweet_text,
                                 keyword=a_keyword,
@@ -108,7 +109,8 @@ def tweet_scheduled_job():
                                 user_screen_name=user_screen_name,
                                 user_location=user_location,
                                 retweets=retweets,
-                                favorites=favorites
+                                favorites=favorites,
+                                url=url
                             )
                             new_twitter.save()
 
@@ -132,6 +134,7 @@ def tweet_scheduled_job():
                         user_location = status.geo
                         retweets = status.retweets
                         favorites = status.favorites
+                        url = status.permalink
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             tweet_id=tweet_id,
@@ -140,7 +143,8 @@ def tweet_scheduled_job():
                             user_screen_name=user_screen_name,
                             user_location=user_location,
                             retweets=retweets,
-                            favorites=favorites
+                            favorites=favorites,
+                            url=url
                         )
                         new_twitter.save()
 
@@ -164,6 +168,7 @@ def tweet_scheduled_job():
                         user_location = status.geo
                         retweets = status.retweets
                         favorites = status.favorites
+                        url = status.permalink
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             keyword=a_keyword,
@@ -173,7 +178,8 @@ def tweet_scheduled_job():
                             user_screen_name=user_screen_name,
                             user_location=user_location,
                             retweets=retweets,
-                            favorites=favorites
+                            favorites=favorites,
+                            url=url
                         )
                         new_twitter.save()
 
@@ -205,6 +211,7 @@ def tweet_scheduled_job():
                         user_location = status.geo
                         retweets = status.retweets
                         favorites = status.favorites
+                        url = status.permalink
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             tweet_id=tweet_id,
@@ -213,7 +220,8 @@ def tweet_scheduled_job():
                             user_screen_name=user_screen_name,
                             user_location=user_location,
                             retweets=retweets,
-                            favorites=favorites
+                            favorites=favorites,
+                            url=url
                         )
                         new_twitter.save()
 
@@ -245,6 +253,7 @@ def tweet_scheduled_job():
                         user_location = status.geo
                         retweets = status.retweets
                         favorites = status.favorites
+                        url = status.permalink
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             keyword=a_keyword,
@@ -254,7 +263,8 @@ def tweet_scheduled_job():
                             user_screen_name=user_screen_name,
                             user_location=user_location,
                             retweets=retweets,
-                            favorites=favorites
+                            favorites=favorites,
+                            url=url
                         )
                         new_twitter.save()
 
@@ -287,6 +297,7 @@ def tweet_scheduled_job():
                         user_location = status.geo
                         retweets = status.retweets
                         favorites = status.favorites
+                        url = status.permalink
                         new_twitter = Twitter(
                             tweet_text=tweet_text,
                             keyword=a_keyword,
@@ -296,7 +307,8 @@ def tweet_scheduled_job():
                             user_screen_name=user_screen_name,
                             user_location=user_location,
                             retweets=retweets,
-                            favorites=favorites
+                            favorites=favorites,
+                            url=url
                         )
                         new_twitter.save()
 

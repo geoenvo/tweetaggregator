@@ -2,8 +2,10 @@ from __future__ import unicode_literals
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib.gis import admin
+from django.contrib.admin import SimpleListFilter
 
-from .models import Source, Keyword, Twitter, Retweet, Source_Property
+from .forms import TwitterForm
+from .models import Source, Keyword, Twitter, Retweet, Source_Property, Category
 
 
 verbose_source_details = _('Source details')
@@ -23,11 +25,11 @@ class SourceAdmin(admin.ModelAdmin):
         (verbose_source_details, {
             'fields': [
                 'method',
+                'type',
                 'name',
                 'username',
                 ('since', 'until'),
                 'created',
-                'type',
                 'status',
                 'note'
             ]
@@ -66,11 +68,40 @@ class KeywordAdmin(admin.ModelAdmin):
     search_fields = ['keyword', 'source__name']
 
 
+# For filtering tweets based on categories field
+class CategoryFilter(SimpleListFilter):
+    """
+    Custom filter by tweets categories. For multiple category queries separate category keywords with comma.
+    """
+    title = 'Category'
+    parameter_name = 'categories'
+
+    def lookups(self, request, model_admin):
+        categories = Category.objects.all()
+        return [(category.name, category.name) for category in categories]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            # check if multiple categories are joined by comma and search articles that have all categories
+            categories = [category.strip() for category in self.value().split(',')]
+            if len(categories) > 1:
+                for category in categories:
+                    queryset = queryset.filter(categories__icontains=category)
+                return queryset
+            else:
+                return queryset.filter(categories__icontains=self.value())
+        else:
+            return queryset
+
+
 class TwitterAdmin(admin.ModelAdmin):
+    form = TwitterForm
     fieldsets = [
         (verbose_twitter_details, {
             'fields': [
                 'keyword',
+                'categories',
+                'published',
                 'user_name',
                 'user_screen_name',
                 'tags_tweet',
@@ -89,24 +120,43 @@ class TwitterAdmin(admin.ModelAdmin):
     ]
     list_display = [
         'tweet_id',
-        'keyword',
-        'tags',
         'user_screen_name',
+        'tweet_created',
+        'url_',
         'retweets',
         'favorites',
-        'user_coordinate',
-        'tweet_created'
+        'keyword',
+        'categories',
+        'published',
+        ####'tags',
+        ####'user_coordinate'
     ]
     ordering = ['-tweet_created']
     date_hierarchy = 'tweet_created'
-    list_filter = ['keyword', 'tweet_created', 'user_screen_name']
-    search_fields = ['user_name', 'user_screen_name', 'tweet_created', 'tweet_text']
+    list_editable = ['published',]
+    list_filter = [
+      'keyword',
+      'tweet_created',
+      CategoryFilter,
+      ####'user_screen_name'
+    ]
+    search_fields = [
+        ####'user_name',
+        'user_screen_name',
+        'tweet_created',
+        'tweet_text'
+    ]
 
     def tags(self, twitter):
         tags = []
         for tag in twitter.tags_tweet.all():
             tags.append(str(tag))
         return ', '.join(tags)
+
+    def url_(self, instance):
+        return '<a href="{url}" target="_blank">{title}</a>'.format(
+            url=instance.url, title=instance.url)
+    url_.allow_tags = True
 
 
 class RetweetAdmin(admin.ModelAdmin):
@@ -163,8 +213,14 @@ class SourcePropertyAdmin(admin.ModelAdmin):
     search_fields = ['source__name', 'source__username', 'source__method', 'created']
 
 
+# For managing tweet categories
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name',]
+
+
 admin.site.register(Source, SourceAdmin)
 admin.site.register(Keyword, KeywordAdmin)
 admin.site.register(Twitter, TwitterAdmin)
 admin.site.register(Retweet, RetweetAdmin)
 admin.site.register(Source_Property, SourcePropertyAdmin)
+admin.site.register(Category, CategoryAdmin)

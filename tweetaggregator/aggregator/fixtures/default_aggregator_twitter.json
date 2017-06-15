@@ -1,0 +1,126 @@
+[
+{
+  "model": "aggregator.source",
+  "pk": 1,
+  "fields": {
+    "name": "GOT key: #perubahaniklim",
+    "username": "",
+    "created": "2017-06-14T18:29:47",
+    "updated": "2017-06-15T12:20:40.080",
+    "type": "TWITTER",
+    "status": "ACTIVE",
+    "method": "GOT",
+    "note": "",
+    "since": "2017-06-01",
+    "until": null
+  }
+},
+{
+  "model": "aggregator.source",
+  "pk": 4,
+  "fields": {
+    "name": "GOT key: #climatechange",
+    "username": "",
+    "created": "2017-06-15T11:44:27",
+    "updated": "2017-06-15T12:18:56.289",
+    "type": "TWITTER",
+    "status": "INACTIVE",
+    "method": "GOT",
+    "note": "",
+    "since": "2017-06-01",
+    "until": null
+  }
+},
+{
+  "model": "aggregator.source",
+  "pk": 5,
+  "fields": {
+    "name": "GOT key: #kualitasudara",
+    "username": "",
+    "created": "2017-06-15T11:45:53",
+    "updated": "2017-06-15T11:47:02.578",
+    "type": "TWITTER",
+    "status": "ACTIVE",
+    "method": "GOT",
+    "note": "",
+    "since": "2017-06-01",
+    "until": null
+  }
+},
+{
+  "model": "aggregator.source",
+  "pk": 6,
+  "fields": {
+    "name": "GOT key: #climatechangeadaptation",
+    "username": "",
+    "created": "2017-06-15T11:47:18",
+    "updated": "2017-06-15T12:19:31.344",
+    "type": "TWITTER",
+    "status": "INACTIVE",
+    "method": "GOT",
+    "note": "",
+    "since": "2017-06-01",
+    "until": null
+  }
+},
+{
+  "model": "aggregator.keyword",
+  "pk": 1,
+  "fields": {
+    "source": 1,
+    "keyword": "#perubahaniklim"
+  }
+},
+{
+  "model": "aggregator.keyword",
+  "pk": 4,
+  "fields": {
+    "source": 4,
+    "keyword": "#climatechange"
+  }
+},
+{
+  "model": "aggregator.keyword",
+  "pk": 5,
+  "fields": {
+    "source": 5,
+    "keyword": "#kualitasudara"
+  }
+},
+{
+  "model": "aggregator.keyword",
+  "pk": 6,
+  "fields": {
+    "source": 6,
+    "keyword": "#climatechangeadaptation"
+  }
+},
+{
+  "model": "aggregator.category",
+  "pk": 1,
+  "fields": {
+    "name": "perubahan iklim"
+  }
+},
+{
+  "model": "aggregator.category",
+  "pk": 2,
+  "fields": {
+    "name": "climate change"
+  }
+},
+{
+  "model": "aggregator.category",
+  "pk": 3,
+  "fields": {
+    "name": "kualitas udara"
+  }
+},
+{
+  "model": "aggregator.category",
+  "pk": 4,
+  "fields": {
+    "name": "climate change adaptation"
+  }
+}
+]

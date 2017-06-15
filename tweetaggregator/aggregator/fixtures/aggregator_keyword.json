@@ -1,6 +1,6 @@
 [
     {
-        "model": "reportaggregator.keyword",
+        "model": "aggregator.keyword",
         "pk": 1,
         "fields": {
             "source": 1,

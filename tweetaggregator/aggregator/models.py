@@ -3,7 +3,10 @@ from __future__ import unicode_literals
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.gis.db import models
+
 from taggit_autosuggest.managers import TaggableManager
+from multiselectfield import MultiSelectField
+
 
 verbose_created = _('Created')
 verbose_updated = _('Updated')
@@ -98,7 +101,8 @@ class Source(models.Model):
         get_latest_by = 'pk'
 
     def __unicode__(self):
-        return '[%s] - %s - %s' % (self.name, self.username, self.status)
+        ####return '%s - %s - %s' % (self.name, self.username, self.status)
+        return '%s - %s' % (self.name, self.status)
 
 
 class Keyword(models.Model):
@@ -117,7 +121,26 @@ class Keyword(models.Model):
         get_latest_by = 'pk'
 
     def __unicode__(self):
-        return '[%s] - %s' % (self.source, self.keyword)
+        ####return '[%s] - %s' % (self.source, self.keyword)
+        return '%s' % (self.keyword)
+
+
+# Required for dynamic choices with django-multiselectfield, see workaround https://github.com/goinnn/django-multiselectfield/issues/62
+class CustomMultiSelectField(MultiSelectField):
+    def validate(self, value, model_instance):
+        pass
+
+
+# Model for tweet category used by django-multiselectfield
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return '%s' % (self.name)
+
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = _('Categories')
 
 
 class Twitter(models.Model):
@@ -190,13 +213,22 @@ class Twitter(models.Model):
         verbose_name=verbose_favorites
     )
     tags_tweet = TaggableManager(blank=True)
+    categories = CustomMultiSelectField( # multiple article category from Category model
+        choices=[('placeholder', 'placeholder')],
+        max_choices=10,
+        max_length=1000,
+        blank=True
+    )
+    published = models.BooleanField(default=False) # flag if tweet is relevant/irrelevant
+    url = models.URLField(blank=True) # for tweet permalink
 
     class Meta:
         ordering = ['pk']
         get_latest_by = 'pk'
+        verbose_name_plural = _('Twitter')
 
     def __unicode__(self):
-        return '[%s] - %s - %s' % (self.tweet_id, self.user_screen_name, self.tweet_created)
+        return '%s - %s - %s' % (self.tweet_id, self.user_screen_name, self.tweet_created)
 
 
 class Retweet(models.Model):
@@ -261,7 +293,7 @@ class Retweet(models.Model):
         get_latest_by = 'pk'
 
     def __unicode__(self):
-        return '[%s] - %s' % (self.user_screen_name, self.retweet_created)
+        return '%s - %s' % (self.user_screen_name, self.retweet_created)
 
 
 class Source_Property(models.Model):
@@ -286,6 +318,7 @@ class Source_Property(models.Model):
     class Meta:
         ordering = ['pk']
         get_latest_by = 'pk'
+        verbose_name_plural = _('Source Properties')
 
     def __unicode__(self):
         return '[%s] - %s' % (self.source, self.created)
