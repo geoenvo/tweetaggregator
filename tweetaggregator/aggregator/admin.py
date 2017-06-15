@@ -126,7 +126,7 @@ class TwitterAdmin(admin.ModelAdmin):
         'retweets',
         'favorites',
         'keyword',
-        'categories',
+        'categories_',
         'published',
         ####'tags',
         ####'user_coordinate'
@@ -157,6 +157,15 @@ class TwitterAdmin(admin.ModelAdmin):
         return '<a href="{url}" target="_blank">{title}</a>'.format(
             url=instance.url, title=instance.url)
     url_.allow_tags = True
+    
+    def categories_(self, instance):
+        # workaround for categories not showing in display list
+        if instance.categories:
+            categories = []
+            instance = Twitter.objects.get(pk=instance.pk)
+            for category in instance.categories:
+                categories.append(str(category))
+            return ', '.join(categories)
 
 
 class RetweetAdmin(admin.ModelAdmin):
