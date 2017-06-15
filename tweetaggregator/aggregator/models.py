@@ -129,7 +129,8 @@ class Twitter(models.Model):
         null=True
     )
     tweet_id = models.BigIntegerField(
-        verbose_name=verbose_tweetid
+        verbose_name=verbose_tweetid,
+        db_index=True
     )
     tweet_created = models.DateTimeField(
         default=timezone.now,
@@ -142,7 +143,8 @@ class Twitter(models.Model):
     user_id = models.BigIntegerField(
         blank=True,
         null=True,
-        verbose_name=verbose_userid
+        verbose_name=verbose_userid,
+        db_index=True
     )
     user_name = models.CharField(
         max_length=100,
@@ -158,7 +160,8 @@ class Twitter(models.Model):
     )
     user_screen_name = models.CharField(
         max_length=100,
-        verbose_name=verbose_userscreenname
+        verbose_name=verbose_userscreenname,
+        db_index=True
     )
     user_utc_offset = models.IntegerField(
         blank=True,
