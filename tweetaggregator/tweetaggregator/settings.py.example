@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#### Change admin header text
+ADMIN_SITE_HEADER = 'Admin' # Default is: "Django administration" on header
+ADMIN_INDEX_TITLE = 'Settings' # Default is: "Site administration" below header
+ADMIN_SITE_TITLE = 'Admin' # Default is: Django site admin on browser window title
+
 
 # Application definition
 
